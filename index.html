@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#6C5CE7"/>
+<title>Опционы — учебный тренажёр</title>
+<style>:root{
+  --p:#6C5CE7;--p2:#4B3FC7;--g:#00B894;--r:#E17055;--y:#FDCB6E;
+  --ink:#2D3436;--muted:#636E72;--bg:#F5F6FA;--card:#fff;--line:#ECEFF4;
+  --shadow:0 10px 30px rgba(45,52,54,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#e9edf5;color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.45}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit;font-size:16px}
+.phone{width:min(430px,100%);margin:0 auto;min-height:100vh;background:var(--bg);position:relative;
+  box-shadow:0 0 0 1px #e3e7ef, 0 24px 80px rgba(45,52,54,.12)}
+.safe{padding:12px 16px 92px}
+.topnav{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;margin-bottom:12px}
+.iconbtn{width:44px;height:44px;border:0;background:#fff;border-radius:14px;display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow)}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#a29bfe,#6C5CE7);color:#fff;display:grid;place-items:center;font-weight:700}
+.brandrow{display:flex;align-items:center;gap:10px}
+.brandrow b{font-size:15px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:12px}
+h1{font-size:24px;font-weight:800;margin:0 0 8px;letter-spacing:-.02em}
+h2{font-size:20px;font-weight:700;margin:0 0 8px}
+h3{font-size:16px;font-weight:600;margin:0 0 6px}
+.card{background:#fff;border-radius:20px;padding:16px;box-shadow:var(--shadow);margin:0 0 12px}
+.btn{min-height:44px;border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn-p{background:var(--p);color:#fff;box-shadow:0 8px 18px rgba(108,92,231,.28)}
+.btn-p:active{background:var(--p2)}
+.btn-o{background:#fff;color:var(--ink);border:1.5px solid #E1E4EA}
+.btn-o.wauto,.btn.wauto{width:auto}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.rowbtns{display:flex;gap:10px}
+.rowbtns .btn{flex:1}
+.prog{display:flex;gap:14px;align-items:center}
+.ring{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+  background:conic-gradient(var(--p) calc(var(--pct)*1%), #ECEAF8 0);position:relative}
+.ring::after{content:attr(data-v);position:absolute;inset:8px;background:#fff;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--p)}
+.pill{display:inline-block;background:#F0EEFF;color:var(--p);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.lesson{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:#fff;margin-bottom:8px;box-shadow:var(--shadow);min-height:56px}
+.lesson.on{outline:2px solid var(--p);background:#F7F5FF}
+.lesson.lock{opacity:.55}
+.ncirc{width:28px;height:28px;border-radius:50%;background:#F0EEFF;color:var(--p);display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0}
+.ncirc.done{background:var(--g);color:#fff}
+.tabs-bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);
+  background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px 14px;z-index:20}
+.tabs-bottom a{text-align:center;font-size:11px;font-weight:600;color:#9AA0A6;padding:6px 0}
+.tabs-bottom a.on{color:var(--p)}
+.tabs-bottom svg{display:block;margin:0 auto 2px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:0 0 8px;padding:14px 14px;border-radius:16px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:600;min-height:48px}
+.opt.sel{border-color:var(--p);background:#F4F1FF;box-shadow:0 0 0 3px rgba(108,92,231,.12)}
+.letter{width:28px;height:28px;border-radius:8px;background:#F5F6FA;display:grid;place-items:center;font-weight:800;color:var(--muted);flex-shrink:0}
+.opt.sel .letter{background:var(--p);color:#fff}
+.ok{background:#E8FBF6;color:#0f766e;padding:12px;border-radius:14px}
+.no{background:#FDECEA;color:#c0392b;padding:12px;border-radius:14px}
+.bar{height:8px;background:#ECEAF8;border-radius:99px;overflow:hidden;flex:1}
+.bar>i{display:block;height:100%;background:var(--p);border-radius:99px}
+.acc{border:1px solid var(--line);border-radius:16px;background:#fff;margin:8px 0;overflow:hidden}
+.acc b{display:flex;justify-content:space-between;padding:14px 16px;cursor:pointer}
+.acc .hid{display:none;padding:0 16px 14px;color:var(--muted)}
+.acc.open .hid{display:block}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.callc,.putc{border-radius:16px;padding:12px;text-align:center}
+.callc{background:#E8FBF6;color:#0f766e}
+.putc{background:#FDECEA;color:#c0392b}
+.field{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:8px}
+.field:last-child{border-bottom:0}
+.field span{color:var(--muted);font-size:14px}
+.field b,.field input,.field select{font-weight:700;border:0;background:transparent;text-align:right;width:90px}
+.slider{width:100%;accent-color:var(--p);height:44px}
+.mini2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini2 .card{margin:0;text-align:center;padding:12px}
+.authbox{padding:28px 16px}
+input[type=email],input[type=password],input[type=number]{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:#fff}
+label{display:block;font-weight:700;margin:12px 0 6px;font-size:14px}
+.hero-mark{width:44px;height:44px;border-radius:14px;background:#F5F6FA;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px #ECEFF4}
+.muted{color:var(--muted)}
+.ach{display:flex;gap:10px}
+.ach i{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#F0EEFF;font-style:normal}
+.ach i.off{filter:grayscale(1);opacity:.4}
+#chart{min-height:180px}
+.err{display:none;margin-top:8px}
+.tog{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:44px;font-weight:700;cursor:pointer}
+.tog input{width:22px;height:22px;accent-color:var(--p)}
+.badge-pp{display:inline-block;background:#F0EEFF;color:var(--p);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+@media(min-width:900px){
+  body{padding:24px 0}
+  .phone{min-height:calc(100vh - 48px);border-radius:28px;overflow:hidden}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="phone"><div class="safe" style="padding-top:48px">
+    <h1>Опционы — учебный тренажёр</h1>
+    <p>Откройте файл в Safari, если страница не оживает.</p>
+    <a class="btn btn-p" href="#/register">Начать</a>
+  </div></div>
+</div>
+<script>
+window.onerror=function(m){var el=document.getElementById('app');if(el)el.innerHTML='<div style="padding:24px">Ошибка: '+String(m)+'</div>';};
+const LESSONS = [
+  {
+    id: 1,
+    title: 'Что такое опцион',
+    minutes: 8,
+    body: [
+      'Опцион — это контракт, который даёт покупателю право, но не обязанность, купить или продать базовый актив по заранее оговорённой цене до определённой даты или в эту дату.',
+      'Покупатель платит за это право премию. Продавец получает премию и берёт на себя соответствующее обязательство, если покупатель реализует право.',
+      'В этом курсе мы используем упрощённую учебную модель: считаем P/L покупателя на экспирации, без комиссий, налогов и размера контракта. Это не описание всех типов опционов на Московской бирже (там бывают и премиальные, и маржируемые контракты).',
+    ],
+    example: 'Вы купили право купить акцию по 100 ₽. Если к экспирации акция стоит 120 ₽, право имеет смысл. Если 80 ₽ — вы не обязаны покупать и теряете только премию.',
+    takeaways: [
+      'Опцион — право, а не обязанность для покупателя.',
+      'За право платится премия.',
+      'Мы считаем учебный P/L на экспирации, без реальных комиссий.',
+    ],
+  },
+  {
+    id: 2,
+    title: 'Call и Put',
+    minutes: 8,
+    body: [
+      'Call (колл) даёт право купить базовый актив по страйку. Покупатель колла выигрывает, если цена актива растёт выше страйка настолько, чтобы покрыть премию.',
+      'Put (пут) даёт право продать базовый актив по страйку. Покупатель пута выигрывает, если цена актива падает ниже страйка с запасом на премию.',
+      'Запомните: колл — про рост, пут — про падение. Мы изучаем только длинные позиции покупателя: Long Call и Long Put.',
+    ],
+    example: 'Базовый актив стоит 100 ₽. Long Call со страйком 100 — ставка на рост. Long Put со страйком 100 — ставка на падение (или страховка).',
+    takeaways: ['Call = право купить.', 'Put = право продать.', 'Курс изучает Long Call и Long Put.'],
+  },
+  {
+    id: 3,
+    title: 'Страйк, премия, экспирация',
+    minutes: 8,
+    body: [
+      'Страйк — цена, по которой покупатель может купить (колл) или продать (пут) базовый актив.',
+      'Премия — цена самого опциона, которую покупатель платит сразу. Это фиксированное число в рублях на единицу актива.',
+      'Экспирация — дата, когда контракт прекращается. В уроках P/L считается именно на экспирации, а не по текущей рыночной цене опциона до неё.',
+    ],
+    example: 'Call, страйк 100 ₽, премия 5 ₽. На экспирации смотрим цену базового актива и считаем выплату.',
+    takeaways: ['Страйк — цена исполнения.', 'Премия — плата за право.', 'Цена актива на экспирации нужна для расчёта P/L.'],
+  },
+  {
+    id: 4,
+    title: 'Покупатель и продавец',
+    minutes: 7,
+    body: [
+      'Покупатель опциона (long) платит премию. Его максимальный убыток ограничен премией.',
+      'Продавец (short) получает премию. У продавца колла потенциальный убыток при сильном росте не ограничен.',
+      'В этом курсе мы не торгуем и не открываем короткие позиции. Нужно лишь понимать, что у каждой сделки есть вторая сторона.',
+    ],
+    example: 'Купили колл за 5 ₽. Худший исход для покупателя: −5 ₽. Для продавца этого колла лучший исход: +5 ₽, если опцион истечёт без выплаты.',
+    takeaways: ['Убыток long ограничен премией.', 'Продавец получает премию и несёт обязательство.', 'Курс не учит продавать опционы.'],
+  },
+  {
+    id: 5,
+    title: 'Базовый актив и деньги',
+    minutes: 7,
+    body: [
+      'Базовый актив — то, на что выписан опцион: акция, индекс, фьючерс и т.д. В задачах цена базового актива указана в рублях.',
+      'Учебные суммы — на одну единицу актива. Реальные контракты имеют лот и мультипликатор; в этом курсе они не учитываются.',
+      'Не смешивайте цену базового актива и премию опциона. Это разные величины: рынок актива и цена контракта.',
+    ],
+    example: 'Цена базового актива 120 ₽, страйк 100 ₽. Это не «доход 20 ₽» сами по себе: нужно ещё вычесть премию.',
+    takeaways: ['Это цена базового актива.', 'Учебный расчёт без лота и комиссий.', 'Премия ≠ цена актива.'],
+  },
+  {
+    id: 6,
+    title: 'ITM, ATM, OTM',
+    minutes: 9,
+    body: [
+      'Внутренняя стоимость колла: максимум из нуля и (цена базового актива − страйк). Пута: максимум из нуля и (страйк − цена базового актива).',
+      'ITM (in the money): внутренняя стоимость > 0. Для колла цена базового актива выше страйка, для пута — ниже страйка.',
+      'ATM (at the money): цена базового актива около страйка, внутренняя стоимость около нуля. OTM (out of the money): внутренняя стоимость 0. Для колла цена ниже страйка, для пута — выше.',
+      'ITM/OTM говорит о положении относительно страйка, а не о том, прибыльна ли уже ваша сделка: премия могла быть больше внутренней стоимости.',
+    ],
+    example: 'Call, страйк 100, цена 120 → ITM. Put, страйк 100, цена 120 → OTM.',
+    takeaways: ['Call ITM, если цена базового актива выше страйка.', 'Put ITM, если цена базового актива ниже страйка.', 'ITM ≠ автоматически прибыль с учётом премии.'],
+  },
+  {
+    id: 7,
+    title: 'P/L и точка безубыточности',
+    minutes: 10,
+    body: [
+      'P/L покупателя колла на экспирации: внутренняя стоимость минус премия.',
+      'P/L покупателя пута на экспирации: внутренняя стоимость минус премия.',
+      'Точка безубыточности колла: страйк + премия. Пута: страйк − премия. В этой точке P/L = 0.',
+      'Если опцион истекает OTM, выплата 0, P/L = −Premium.',
+    ],
+    example: 'Call, страйк 100, премия 5, цена 120 на экспирации: (120−100)−5 = +15 ₽. Если цена 90: 0−5 = −5 ₽.',
+    takeaways: ['Формулы P/L только на экспирации.', 'Безубыток колла = страйк + премия.', 'Безубыток пута = страйк − премия.'],
+  },
+  {
+    id: 8,
+    title: 'Временная стоимость',
+    minutes: 8,
+    body: [
+      'Премия опциона до экспирации может включать внутреннюю стоимость и временную стоимость.',
+      'Временная стоимость — часть премии сверх внутренней стоимости. Она связана с тем, что до экспирации цена актива ещё может измениться.',
+      'ATM-колл при цене базового актива равной страйку имеет нулевую внутреннюю стоимость. Если премия при этом больше нуля, это как раз временная стоимость (при прочих факторах, включая волатильность). Не утверждаем, что премия > 0 «только из‑за времени».',
+    ],
+    example: 'ATM Call, страйк и цена базового актива 100, до экспирации ещё есть время, премия 4 ₽. Внутренняя стоимость 0, во премии есть временная составляющая.',
+    takeaways: ['Премия = внутренняя + временная (упрощённо).', 'ATM может стоить > 0 до экспирации.', 'На экспирации временная стоимость сгорает.'],
+  },
+  {
+    id: 9,
+    title: 'Волатильность и IV',
+    minutes: 9,
+    body: [
+      'Волатильность описывает, насколько сильно может колебаться цена базового актива.',
+      'Implied Volatility (IV, подразумеваемая волатильность) — оценка волатильности, заложенная в рыночную цену опциона.',
+      'При прочих равных повышение IV обычно повышает стоимость опциона (и колла, и пута), потому что выше шанс сильного движения. Нельзя утверждать, что опцион обязательно подорожает только потому, что IV выросла: меняются и другие параметры.',
+    ],
+    example: 'IV выросла с 20% до 30%, остальные параметры те же. Ожидаемо премия опциона выше, чем была бы при IV 20%.',
+    takeaways: ['IV — параметр цены опциона.', 'Выше IV — обычно дороже опцион, ceteris paribus.', 'IV ≠ гарантия прибыли.'],
+  },
+  {
+    id: 10,
+    title: 'Long Call и Protective Put',
+    minutes: 9,
+    body: [
+      'Long Call — базовая учебная позиция на рост: покупаем колл, риск ограничен премией.',
+      'Protective Put: есть базовый актив, и покупается пут как страховка от падения. Пут даёт право продать актив по страйку.',
+      'Это учебные конструкции, не торговые сигналы.',
+    ],
+    example: 'Ожидаете рост базового актива со 100 ₽ — учебный выбор: Long Call. Держите базовый актив и хотите ограничить падение — Protective Put.',
+    takeaways: ['Рост без актива: Long Call.', 'Актив + страховка падения: Protective Put.', 'Никаких сигналов и реальных сделок в курсе.'],
+  },
+]
+
+function q(id, text, options, answer, explain, type = 'single') {
+  return { id, text, options, answer, explain, type }
+}
+
+const QUIZZES = {
+  1: [
+    q('1-1', 'Опцион для покупателя — это:', ['Обязанность купить актив', 'Право, но не обязанность', 'Гарантия прибыли', 'Кредит биржи'], 1, 'Покупатель получает право и может им не воспользоваться.'),
+    q('1-2', 'Что платит покупатель за опцион?', ['Маржу налога', 'Страйк сразу', 'Премию', 'Дивиденды'], 2, 'Премия — цена права.'),
+    q('1-3', 'Если покупатель не использует право, он:', ['Обязан купить актив', 'Теряет только премию', 'Получает страйк назад', 'Платит штраф бирже'], 1, 'Максимальный убыток long ограничен премией (без комиссий).'),
+    q('1-4', 'Этот курс считает P/L:', ['По внутридневным тикам', 'На экспирации', 'После налогов РФ', 'С учётом лота MOEX'], 1, 'P/L на экспирации, без лота и комиссий.'),
+    q('1-5', 'Материал курса — это:', ['Гарантия прибыли', 'Торговый сигнал', 'Обучение базовым понятиям', 'Оферта брокера'], 2, 'Только обучение, не совет совершать сделки.'),
+  ],
+  2: [
+    q('2-1', 'Call даёт право:', ['Продать актив по страйку', 'Купить актив по страйку', 'Получить дивиденды', 'Отменить экспирацию'], 1, 'Колл — право купить.'),
+    q('2-2', 'Put даёт право:', ['Купить актив по страйку', 'Продать актив по страйку', 'Выпустить акции', 'Сменить базовый актив'], 1, 'Пут — право продать.'),
+    q('2-3', 'Покупатель колла заинтересован в:', ['Падении базового актива', 'Росте базового актива', 'Нулевой волатильности всегда', 'Отмене премии'], 1, 'Колл выигрывает от роста выше страйка.'),
+    q('2-4', 'Покупатель пута заинтересован в:', ['Росте базового актива', 'Падении базового актива', 'Том, чтобы цена росла бесконечно', 'Отсутствии экспирации'], 1, 'Пут выигрывает от падения ниже страйка.'),
+    q('2-5', 'В базовом курсе мы изучаем позиции:', ['Только шорты', 'Long Call и Long Put', 'Календарные спреды', 'Железных кондоров'], 1, 'Только длинные учебные позиции.'),
+  ],
+  3: [
+    q('3-1', 'Страйк — это:', ['Комиссия брокера', 'Цена исполнения в контракте', 'Налог', 'Тикер акции'], 1, 'Страйк — цена, по которой можно купить или продать базовый актив.'),
+    q('3-2', 'Премия — это:', ['Цена опциона', 'Цена базового актива', 'Размер лота', 'Ключевая ставка'], 0, 'Премия — то, что платит покупатель за контракт.'),
+    q('3-3', 'Экспирация — это:', ['Старт торгов акцией', 'Дата окончания контракта', 'Сплит акций', 'Выплата купона'], 1, 'После экспирации право прекращается.'),
+    q('3-4', 'В задачах курса цена актива на экспирации нужна, чтобы:', ['Посчитать учебный P/L', 'Узнать НДС', 'Выбрать брокера', 'Поменять страйк задним числом'], 0, 'P/L считаем на экспирации.'),
+    q('3-5', 'Учитывается ли комиссия биржи в расчётах курса?', ['Да, обязательно', 'Нет, комиссии не учитываются', 'Только для путов', 'Только по пятницам'], 1, 'Ограничение курса.'),
+  ],
+  4: [
+    q('4-1', 'Максимальный убыток покупателя опциона:', ['Неограничен', 'Равен премии', 'Равен страйку', 'Равен цене актива'], 1, 'Long теряет не больше премии.'),
+    q('4-2', 'Продавец опциона:', ['Платит премию', 'Получает премию', 'Всегда в прибыли', 'Не несёт обязательств'], 1, 'Short получает премию.'),
+    q('4-3', 'Курс учит:', ['Продавать голые коллы', 'Понимать сторону покупателя', 'Подключать брокерский API', 'Строить боты'], 1, 'Без коротких стратегий как практики.'),
+    q('4-4', 'У продавца колла при сильном росте цены базового актива риск:', ['Нулевой', 'Ограничен 1 ₽', 'Потенциально большой', 'Равен налогу'], 2, 'Короткий колл опасен при росте.'),
+    q('4-5', 'Премия для покупателя — это:', ['Доход сразу', 'Затрата сразу', 'Возвратный депозит всегда', 'Дивиденд'], 1, 'Покупатель платит премию.'),
+  ],
+  5: [
+    q('5-1', 'Цена актива в задачах — это:', ['Премия', 'Цена базового актива', 'IV', 'Налог'], 1, 'Это цена базового актива.'),
+    q('5-2', 'Лот и мультипликатор в расчётах курса:', ['Обязательны в каждом расчёте', 'Не учитываются', 'Заменяют страйк', 'Равны IV'], 1, 'Абстрактная модель на 1 единицу.'),
+    q('5-3', 'Премия и цена актива — это:', ['Одно и то же', 'Разные величины', 'Всегда равны страйку', 'Налоги'], 1, 'Не путать цену актива и премию.'),
+    q('5-4', 'Если цена актива 120 и страйк 100, прибыль колла без премии ещё:', ['Не посчитана: нужно вычесть премию', 'Всегда 20 ₽ чистыми', 'Всегда убыток', 'Равна IV'], 0, 'P/L = внутренняя стоимость минус премия.'),
+    q('5-5', 'Базовый актив может быть:', ['Только валютой ЦБ', 'Тем, на что выписан опцион (акция, индекс и т.д.)', 'Только криптой', 'Только недвижимостью'], 1, 'Базовый актив задаётся спецификацией контракта.'),
+  ],
+  6: [
+    q('6-1', 'Call ITM, когда:', ['Цена выше страйка', 'Цена ниже страйка', 'Цена равна нулю', 'Премия = 0'], 0, 'Для колла ITM, если цена базового актива выше страйка.'),
+    q('6-2', 'Put OTM, когда:', ['Цена ниже страйка', 'Цена выше страйка', 'Всегда', 'Никогда'], 1, 'Пут без внутренней стоимости, если цена выше страйка.'),
+    q('6-3', 'ATM означает:', ['Цена сильно выше страйка', 'Цена около страйка', 'Опцион запрещён', 'IV = 0'], 1, 'Около денег.'),
+    q('6-4', 'Call, страйк 100, цена актива 120. Статус:', ['OTM', 'ITM', 'Истёк обязательно', 'Put'], 1, 'Цена выше страйка → колл ITM.'),
+    q('6-5', 'ITM всегда значит, что P/L покупателя > 0?', ['Да', 'Нет, премия могла быть больше внутренней стоимости', 'Только для путов', 'Только на MOEX'], 1, 'ITM про внутреннюю стоимость, не про чистый P/L.'),
+  ],
+  7: [
+    q('7-1', 'Long Call P/L на экспирации:', ['Цена минус страйк', 'Внутренняя стоимость минус премия', 'Страйк минус цена', 'Премия минус страйк'], 1, 'Формула курса.'),
+    q('7-2', 'Безубыток колла:', ['Страйк минус премия', 'Страйк плюс премия', 'Цена плюс страйк', '0'], 1, 'Безубыток колла = страйк + премия.'),
+    q('7-3', 'Call, страйк 100, премия 5, цена актива 90 на экспирации. P/L:', ['−5 ₽', '+5 ₽', '+15 ₽', '0 ₽'], 0, 'OTM, потеря премии.'),
+    q('7-4', 'Call, страйк 100, премия 5, цена актива 120. P/L:', ['+15 ₽', '−5 ₽', '+20 ₽', '+5 ₽'], 0, '(120−100)−5 = 15.'),
+    q('7-5', 'Безубыток пута при страйке 100 и премии 5:', ['105 ₽', '95 ₽', '100 ₽', '5 ₽'], 1, 'Страйк минус премия = 95.'),
+  ],
+  8: [
+    q('8-1', 'Временная стоимость — это:', ['Налог', 'Часть премии сверх внутренней стоимости', 'Размер лота', 'Страйк'], 1, 'Упрощённое определение.'),
+    q('8-2', 'ATM Call, когда цена равна страйку, до экспирации:', ['Обязан стоить 0', 'Может иметь премию > 0 за счёт временной стоимости', 'Превращается в пут', 'Запрещён'], 1, 'Внутренняя = 0, премия может быть > 0.'),
+    q('8-3', 'На экспирации временная стоимость:', ['Удваивается', 'Сгорает ( остаётся выплата внутренней)', 'Становится IV', 'Равна страйку'], 1, 'Остаётся внутренняя выплата.'),
+    q('8-4', 'Верно ли, что премия > 0 только из‑за времени?', ['Да, всегда', 'Нет, формулировка слишком жёсткая: есть и другие факторы, включая IV', 'Премия всегда 0', 'Только для фьючерсов'], 1, 'Не утверждаем единственную причину.'),
+    q('8-5', 'Внутренняя стоимость ATM:', ['Около нуля', 'Равна цене актива', 'Равна 100 всегда', 'Равна IV'], 0, 'Цена около страйка.'),
+  ],
+  9: [
+    q('9-1', 'IV — это:', ['Цена акции', 'Подразумеваемая волатильность в цене опциона', 'Налоговая ставка', 'Номер страйка'], 1, 'Implied volatility.'),
+    q('9-2', 'При прочих равных рост IV обычно:', ['Понижает стоимость опциона', 'Повышает стоимость опциона', 'Обнуляет страйк', 'Отменяет экспирацию'], 1, 'Ceteris paribus премия обычно выше.'),
+    q('9-3', 'Рост IV гарантирует прибыль покупателю?', ['Да', 'Нет', 'Только по коллам', 'Только в РФ'], 1, 'Нет гарантий прибыли.'),
+    q('9-4', 'IV влияет:', ['Только на акции без опционов', 'На премию и колла, и пута', 'Только на налоги', 'Только на лот'], 1, 'Оба типа опционов чувствительны к IV.'),
+    q('9-5', 'Формулировка курса про IV:', ['Опцион обязательно подорожает, если IV выросла', 'При прочих равных повышение IV обычно повышает стоимость', 'IV запрещена в обучении', 'IV = P/L'], 1, 'Осторожная формулировка.'),
+  ],
+  10: [
+    q('10-1', 'Ожидание роста без удержания базового актива. Учебный выбор:', ['Long Call', 'Long Put', 'Protective Put', 'Ничего не изучать'], 0, 'Long Call — позиция на рост.'),
+    q('10-2', 'Есть базовый актив и нужна страховка падения:', ['Naked short call', 'Protective Put', 'Игнор риска', 'Только IV'], 1, 'Базовый актив + long put.'),
+    q('10-3', 'Protective Put состоит из:', ['Только колла', 'базовый актив + купленный пут', 'Двух шортов', 'Налога и лота'], 1, 'Страховка путом.'),
+    q('10-4', 'Long Call в курсе — это:', ['Сигнал купить сейчас', 'Учебная конструкция', 'Гарантия +15 ₽', 'Оферта брокера'], 1, 'Не сигнал к сделке.'),
+    q('10-5', 'Курс предлагает реальные сделки?', ['Да', 'Нет', 'Только на MOEX live', 'Через API'], 1, 'Только учёба.'),
+  ],
+}
+
+const TRAINER = [
+  {
+    id: 1,
+    type: 'single',
+    lesson: 10,
+    text: 'Базовый актив стоит 100 ₽. Вы ожидаете рост и не держите сам актив. Какая учебная позиция подходит?',
+    options: ['Long Call', 'Long Put', 'Protective Put', 'Short Call'],
+    answer: 0,
+    explainOk: 'Call — базовая позиция покупателя на рост.',
+    explainNo: 'На рост без удержания базового актива в курсе берём Long Call. Put — про падение, Protective Put — если актив уже есть.',
+  },
+  {
+    id: 2,
+    type: 'single',
+    lesson: 6,
+    text: 'Call, страйк 100 ₽, цена базового актива 120 ₽. Какой статус?',
+    options: ['ITM', 'ATM', 'OTM', 'Нельзя определить'],
+    answer: 0,
+    explainOk: 'Для колла цена выше страйка → ITM.',
+    explainNo: 'Внутренняя стоимость колла max(0, 120−100) = 20 > 0, значит ITM.',
+  },
+  {
+    id: 3,
+    type: 'numeric',
+    lesson: 7,
+    text: 'Long Call. Страйк 100 ₽, премия 5 ₽. Цена базового актива на экспирации 90 ₽. Чему равен P/L на экспирации в рублях?',
+    answer: -5,
+    hint: 'P/L = внутренняя стоимость минус премия',
+    explainOk: 'max(0, 90−100) − 5 = −5 ₽. Опцион истёк OTM, потеряна премия.',
+    explainNo: 'На экспирации выплата 0, потому что 90 < 100. P/L = 0 − 5 = −5 ₽.',
+  },
+  {
+    id: 4,
+    type: 'numeric',
+    lesson: 7,
+    text: 'Call, страйк 100 ₽, премия 5 ₽. Чему равна точка безубыточности покупателя (₽)?',
+    answer: 105,
+    hint: 'Страйк + премия',
+    explainOk: '105 ₽ = 100 + 5.',
+    explainNo: 'Безубыток колла: страйк + премия = 105 ₽.',
+  },
+  {
+    id: 5,
+    type: 'numeric',
+    lesson: 7,
+    text: 'Long Call. Страйк 100 ₽, премия 5 ₽. На экспирации цена актива 120 ₽. P/L в рублях?',
+    answer: 15,
+    hint: 'Цена минус страйк минус премия, если ITM',
+    explainOk: '(120 − 100) − 5 = +15 ₽.',
+    explainNo: 'ITM: 20 − 5 = +15 ₽.',
+  },
+  {
+    id: 6,
+    type: 'numeric',
+    lesson: 7,
+    text: 'Long Put. Страйк 100 ₽, премия 5 ₽. На экспирации цена актива 80 ₽. P/L в рублях?',
+    answer: 15,
+    hint: 'Внутренняя стоимость пута минус премия',
+    explainOk: '(100 − 80) − 5 = +15 ₽.',
+    explainNo: 'Пут ITM на 20, минус премия 5 → +15 ₽.',
+  },
+  {
+    id: 7,
+    type: 'single',
+    lesson: 6,
+    text: 'Put, страйк 100 ₽, цена актива 120 ₽. Статус?',
+    options: ['ITM', 'ATM', 'OTM', 'Call'],
+    answer: 2,
+    explainOk: 'Для пута цена выше страйка → OTM.',
+    explainNo: 'Внутренняя стоимость пута max(0, 100−120) = 0 → OTM.',
+  },
+  {
+    id: 8,
+    type: 'single',
+    lesson: 8,
+    text: 'ATM Call, страйк равен цене актива 100 ₽, до экспирации ещё есть время, премия не нулевая. Что верно?',
+    options: [
+      'Есть временная стоимость: премия может быть > 0 при нулевой внутренней',
+      'Премия обязана быть 0',
+      'Это всегда ITM',
+      'IV обязана быть 0',
+    ],
+    answer: 0,
+    explainOk: 'Внутренняя стоимость 0, но до экспирации премия может включать временную стоимость.',
+    explainNo: 'Не утверждаем, что премия > 0 только из‑за времени, но при нулевой внутренней положительная премия — это временная составляющая (плюс факторы вроде IV).',
+  },
+  {
+    id: 9,
+    type: 'single',
+    lesson: 9,
+    text: 'IV выросла с 20% до 30%, прочие параметры неизменны. Как обычно ведёт себя стоимость опциона?',
+    options: [
+      'Обычно повышается',
+      'Обязательно падает',
+      'Страйк автоматически растёт',
+      'P/L на экспирации сразу +15',
+    ],
+    answer: 0,
+    explainOk: 'При прочих равных повышение IV обычно повышает стоимость опциона.',
+    explainNo: 'Не «обязательно подорожает в любой ситуации», но при прочих равных стоимость обычно выше.',
+  },
+  {
+    id: 10,
+    type: 'single',
+    lesson: 10,
+    text: 'У вас уже есть базовый актив, и вы хотите застраховаться от падения. Как называется учебная конструкция?',
+    options: ['Long Call', 'Short Put', 'Protective Put', 'Covered Call обязательно'],
+    answer: 2,
+    explainOk: 'Базовый актив + Long Put = Protective Put.',
+    explainNo: 'Страховка падения при наличии актива — купленный пут (protective put).',
+  },
+]
+
+const TOKEN_KEY = 'options-mvp-token'
+const LDB = 'options-mvp-ldb'
+const $ = (id) => document.getElementById(id)
+let sessionUser = null
+let bootstrapped = false
+
+function ldb() {
+  try { return JSON.parse(localStorage.getItem(LDB) || '{"users":[]}') } catch { return { users: [] } }
+}
+function ldsave(d) { try { localStorage.setItem(LDB, JSON.stringify(d)) } catch (e) { throw new Error('Safari блокирует сохранение. Откройте файл через «Файлы» → Safari, не через Telegram.') } }
+function emptyProg() {
+  return { lessons: {}, quizzes: {}, trainer: { attempts: [], best: 0, lastWrong: [], completed: false }, advancedLessons: {}, advancedQuizzes: {}, advancedTrainer: { best: 0, completed: false } }
+}
+function accessOf(p) {
+  const bl = Array.from({ length: 10 }, (_, i) => i + 1).every((id) => p.lessons[id] === 'completed')
+  const bt = Array.from({ length: 10 }, (_, i) => i + 1).every((id) => (p.quizzes[id] && p.quizzes[id].passed))
+  const tr = !!p.trainer.completed
+  const unlocked = bl && bt && tr
+  const AN = (typeof ADVANCED_LESSONS!=='undefined' && ADVANCED_LESSONS.length) ? ADVANCED_LESSONS.length : 12
+  const al = Array.from({ length: AN }, (_, i) => i + 1).every((id) => p.advancedLessons && p.advancedLessons[id] === 'completed')
+  const at = Array.from({ length: AN }, (_, i) => i + 1).every((id) => p.advancedQuizzes && p.advancedQuizzes[id] && p.advancedQuizzes[id].passed)
+  const atr = !!(p.advancedTrainer && p.advancedTrainer.completed)
+  return {
+    status: unlocked ? 'ADVANCED_UNLOCKED' : (bl ? 'BASIC_LESSONS_COMPLETED' : 'BASIC_IN_PROGRESS'),
+    basic_lessons_completed: bl, basic_tests_completed: bt, basic_trainer_completed: tr,
+    advanced_course_unlocked: unlocked, advanced_lessons_completed: al, advanced_tests_completed: at,
+    advanced_trainer_unlocked: unlocked && at, advanced_course_completed: atr,
+  }
+}
+function pub(u) {
+  return {
+    email: u.email,
+    access: accessOf(u.progress),
+    progress: {
+      lessons: u.progress.lessons,
+      quizzes: u.progress.quizzes,
+      trainer: { best: u.progress.trainer.best, completed: !!u.progress.trainer.completed, lastWrong: u.progress.trainer.lastWrong || [] },
+      advancedLessons: u.progress.advancedLessons || {},
+      advancedQuizzes: u.progress.advancedQuizzes || {},
+      advancedTrainer: u.progress.advancedTrainer || { best: 0, completed: false },
+    },
+  }
+}
+function localApi(path, body, token) {
+  const pth = String(path).split('?')[0]
+  const db = ldb()
+  const tok = token || localStorage.getItem(TOKEN_KEY)
+  const findByTok = () => db.users.find((u) => u.token === tok)
+  if (pth.endsWith('/register') || pth.endsWith('api/register')) {
+    const e = String(body.email || '').trim().toLowerCase()
+    if (!e.includes('@')) throw new Error('Некорректный email')
+    if (!body.password || String(body.password).length < 6) throw new Error('Пароль от 6 символов')
+    if (db.users.some((u) => u.email === e)) throw new Error('Этот email уже зарегистрирован')
+    const token = 'loc-' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+    const user = { email: e, password: String(body.password), token, progress: emptyProg() }
+    db.users.push(user); ldsave(db)
+    return { token, user: pub(user) }
+  }
+  if (pth.endsWith('/login') || pth.endsWith('api/login')) {
+    const e = String(body.email || '').trim().toLowerCase()
+    const user = db.users.find((u) => u.email === e && u.password === String(body.password || ''))
+    if (!user) throw new Error('Неверный email или пароль')
+    user.token = 'loc-' + Math.random().toString(36).slice(2)
+    ldsave(db)
+    return { token: user.token, user: pub(user) }
+  }
+  const user = findByTok()
+  if (!user) throw new Error('Нужна авторизация')
+  if (pth.endsWith('/me') || pth.endsWith('api/me')) return { user: pub(user) }
+  if (pth.includes('/lesson/complete')) {
+    const n = Number(body.id)
+    if (user.progress.lessons[n] !== 'completed') user.progress.lessons[n] = 'in_progress'
+    ldsave(db); return { user: pub(user) }
+  }
+  const qm = pth.match(/quiz\/(\d+)\/submit/)
+  if (qm) {
+    const n = Number(qm[1]); const qs = QUIZZES[n]
+    let score = 0
+    ;(body.answers || []).forEach((a, i) => { if (Number(a) === qs[i].answer) score++ })
+    const passed = score >= 4
+    user.progress.quizzes[n] = { score, passed }
+    if (passed) user.progress.lessons[n] = 'completed'
+    ldsave(db); return { score, passed, user: pub(user) }
+  }
+  if (pth.includes('trainer/submit') && !pth.includes('advanced')) {
+    let score = 0; const wrong = []
+    TRAINER.forEach((q, i) => {
+      const ok = Number(body.answers[i]) === q.answer
+      if (ok) score++; else wrong.push(q.id)
+    })
+    user.progress.trainer.best = Math.max(user.progress.trainer.best || 0, score)
+    user.progress.trainer.lastWrong = wrong
+    if (score >= 7) user.progress.trainer.completed = true
+    ldsave(db); return { score, passed: score >= 7, user: pub(user) }
+  }
+  if (pth.includes('/advanced')) {
+    const acc = accessOf(user.progress)
+    if (!acc.advanced_course_unlocked) {
+      const err = new Error('Продвинутый курс закрыт. Завершите базовый курс, тесты и тренажёр.')
+      err.http = 403
+      err.data = { message: err.message, access: acc }
+      throw err
+    }
+    const lm = pth.match(/advanced\/lesson\/(\d+)/)
+    if (lm && typeof ADVANCED_LESSONS !== 'undefined') {
+      const id = Number(lm[1])
+      const lesson = ADVANCED_LESSONS.find((x) => x.id === id)
+      if (!lesson) throw new Error('Нет урока')
+      if (user.progress.advancedLessons[id] !== 'completed') user.progress.advancedLessons[id] = 'in_progress'
+      ldsave(db)
+      return { lesson: lesson, user: pub(user) }
+    }
+    const qm = pth.match(/advanced\/quiz\/(\d+)/)
+    if (qm && typeof ADVANCED_QUIZZES !== 'undefined') {
+      const n = Number(qm[1])
+      const qs = ADVANCED_QUIZZES[n]
+      if (!qs) throw new Error('Нет теста')
+      if (!body || !body.answers) return { questions: qs, user: pub(user) }
+      let score = 0
+      ;(body.answers || []).forEach((a, i) => { if (Number(a) === qs[i].answer) score++ })
+      const passed = score >= 4
+      user.progress.advancedQuizzes[n] = { score, passed }
+      if (passed) user.progress.advancedLessons[n] = 'completed'
+      ldsave(db)
+      return { score, passed, user: pub(user) }
+    }
+    if (pth.includes('advanced/trainer') && typeof ADVANCED_TRAINER !== 'undefined') {
+      const aqz = user.progress.advancedQuizzes || {}
+      const AN = ADVANCED_LESSONS.length
+      const testsOk = Array.from({length:AN},(_,i)=>i+1).every((id) => aqz[id] && aqz[id].passed)
+      if (!testsOk) {
+        const err = new Error('Сначала все уроки и тесты продвинутого курса.')
+        err.http = 403
+        throw err
+      }
+      if (!body || !body.answers) return { questions: ADVANCED_TRAINER, user: pub(user) }
+      let score = 0
+      ADVANCED_TRAINER.forEach((q, i) => {
+        if (Number(body.answers[i]) === q.answer) score++
+      })
+      user.progress.advancedTrainer.best = Math.max(user.progress.advancedTrainer.best || 0, score)
+      if (score >= 6) user.progress.advancedTrainer.completed = true
+      ldsave(db)
+      return { score, passed: score >= 6, user: pub(user) }
+    }
+  }
+  throw new Error('Неизвестный запрос')
+}
+
+async function api(path, body, method) {
+  const t = localStorage.getItem(TOKEN_KEY)
+  const want = method || (body ? 'POST' : 'GET')
+  const rel = String(path).replace(/^\//, '')
+  // На телефоне (файл / Telegram) сеть не нужна — всё локально
+  try {
+    const data = localApi(path, body, t)
+    if (data.user) sessionUser = data.user
+    return data
+  } catch (e0) {
+    if (String(e0 && e0.message).indexOf('Неизвестный') === -1) throw e0
+  }
+  try {
+    const url = new URL(rel, location.href.split('#')[0])
+    const headers = { 'Content-Type': 'application/json', ...(t ? { Authorization: 'Bearer ' + t } : {}) }
+    let res = await fetch(url, { method: want, headers, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' })
+    if ((res.status === 405 || res.status === 501 || res.status === 404) && body) {
+      const u2 = new URL(url)
+      u2.searchParams.set('_method', want)
+      u2.searchParams.set('_json', JSON.stringify(body))
+      res = await fetch(u2, { method: 'GET', headers: t ? { Authorization: 'Bearer ' + t } : {}, cache: 'no-store' })
+    }
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}))
+      if (data.user) sessionUser = data.user
+      return data
+    }
+    if (res.status === 404 || res.status === 405 || res.status === 501) {
+      const data = localApi(path, body, t)
+      if (data.user) sessionUser = data.user
+      return data
+    }
+    const data = await res.json().catch(() => ({}))
+    const err = new Error(data.message || data.error || ('Ошибка сервера ' + res.status))
+    err.http = res.status; err.data = data; throw err
+  } catch (e) {
+    if (e.http && e.http !== 404) throw e
+    const data = localApi(path, body, t)
+    if (data.user) sessionUser = data.user
+    return data
+  }
+}
+
+function user() {
+  if (!sessionUser) return null
+  const p = sessionUser.progress || {}
+  return {
+    email: sessionUser.email,
+    access: accessOf(p),
+    progress: {
+      lessons: p.lessons || {},
+      quizzes: p.quizzes || {},
+      trainer: {
+        attempts: [],
+        best: (p.trainer && p.trainer.best) || 0,
+        lastWrong: (p.trainer && p.trainer.lastWrong) || [],
+        completed: !!(p.trainer && p.trainer.completed),
+      },
+      missions: JSON.parse(localStorage.getItem('missions-' + sessionUser.email) || '{}'),
+      advancedLessons: p.advancedLessons || {},
+      advancedQuizzes: p.advancedQuizzes || {},
+      advancedTrainer: p.advancedTrainer || { best: 0, completed: false },
+    },
+  }
+}
+function mut(fn) {
+  const u = user()
+  if (!u) return
+  fn(u.progress)
+  try { localStorage.setItem('missions-' + u.email, JSON.stringify(u.progress.missions || {})) } catch (e) {}
+  try {
+    var db = ldb(); var tok = localStorage.getItem(TOKEN_KEY)
+    var uu = db.users.find(function(x){ return x.token === tok })
+    if (uu) {
+      uu.progress = uu.progress || emptyProg()
+      uu.progress.lessons = u.progress.lessons
+      uu.progress.quizzes = u.progress.quizzes
+      uu.progress.trainer = Object.assign({}, uu.progress.trainer||{}, u.progress.trainer)
+      uu.progress.advancedLessons = u.progress.advancedLessons || {}
+      uu.progress.advancedQuizzes = u.progress.advancedQuizzes || {}
+      uu.progress.advancedTrainer = u.progress.advancedTrainer || { best: 0, completed: false }
+      ldsave(db)
+      var missions = u.progress.missions
+      sessionUser = pub(uu)
+      if (sessionUser && sessionUser.progress) sessionUser.progress.missions = missions
+    }
+  } catch (e) {}
+}
+function route() { return (location.hash || '#/').replace(/^#/, '') || '/' }
+function go(h) { location.hash = h.startsWith('#') ? h : '#' + (h.startsWith('/') ? h : '/' + h) }
+
+const DEFAULTS = { S: 100, K: 100, P: 5, S0: 100 }
+let lab = { pos: 'call', hold: false, ...DEFAULTS, view: 'chart' }
+let ui = { quiz: null, trainer: null, mission: 1, missionMsg: '', missionOk: false }
+
+function plCall(S,K,P){ return Math.max(0, S-K) - P }
+function plPut(S,K,P){ return Math.max(0, K-S) - P }
+function plProt(S,K,P,S0){ return (S - S0) + Math.max(0, K-S) - P }
+function pl(pos,S,K,P,S0){
+  if (pos==='put') return plPut(S,K,P)
+  if (pos==='prot') return plProt(S,K,P,S0)
+  return plCall(S,K,P)
+}
+function be(pos,K,P,S0){
+  if (pos==='put') return K-P
+  if (pos==='prot') return (S0==null?100:S0)+P
+  return K+P
+}
+function intrinsic(pos,S,K){ return (pos==='put'||pos==='prot') ? Math.max(0,K-S) : Math.max(0,S-K) }
+function money(pos,S,K){
+  if (Math.abs(S-K) < 0.5) return 'ATM'
+  if (pos==='put' || pos==='prot') return S < K ? 'ITM' : 'OTM'
+  return S > K ? 'ITM' : 'OTM'
+}
+function effectivePos(){
+  if (lab.hold && (lab.pos==='put' || lab.pos==='prot')) return 'prot'
+  if (lab.pos==='prot') return lab.hold ? 'prot' : 'put'
+  if (lab.pos==='cmp') return 'call'
+  return lab.pos
+}
+
+const MISSIONS = [
+  { id:1, title:'Найди Break-even', pos:'call', setup:{S:100,K:100,P:5},
+    text:'Найди точку безубыточности для Long Call при Strike 100 ₽ и Premium 5 ₽.',
+    field:'S', unit:'₽',
+    check:() => lab.pos==='call' && lab.K===100 && lab.P===5 && Math.abs(lab.S-105)<0.51,
+    ok:'Молодец! Ты нашёл точку безубыточности.',
+    no:'P/L = 0, когда цена базового актива = страйк + премия = 105 ₽.' },
+  { id:2, title:'OTM → ITM', pos:'call', setup:{S:80,K:100,P:5},
+    text:'Переведи Call из OTM в ITM, двигая цену базового актива.',
+    check:() => lab.pos==='call' && money('call',lab.S,lab.K)==='ITM',
+    ok:'Верно: для колла ITM, если цена выше страйка.',
+    no:'Для Call нужна цена базового актива выше страйка.' },
+  { id:3, title:'Максимальный убыток Call', pos:'call', setup:{S:90,K:100,P:5},
+    text:'Чему равен максимальный убыток покупателя Call? Введи число (₽).',
+    field:'ans',
+    check:(ans) => lab.pos==='call' && Number(ans)===Number(lab.P),
+    ok:'Верно: максимальный убыток покупателя равен премии.',
+    no:'Максимальный убыток покупателя Call равен премии. Посмотрите текущую премию на ползунке.' },
+  { id:4, title:'Исследуй Put', pos:'put', setup:{S:100,K:100,P:5},
+    text:'Для Long Put выставь цену актива 80 ₽. Какой учебный P/L на экспирации?',
+    field:'ans',
+    check:(ans) => lab.pos==='put' && lab.S===80 && Number(ans)===15,
+    ok:'(100−80)−5 = +15 ₽.',
+    no:'P/L пута = внутренняя стоимость минус премия. При цене 80 это +15.' },
+  { id:5, title:'Собери Protective Put', pos:'call', setup:{S:100,K:100,P:5,hold:false},
+    text:'Соберите Protective Put: включите базовый актив в портфеле и выберите PUT.',
+    check:() => !!lab.hold && lab.pos==='put',
+    ok:'Верно: актив в портфеле плюс купленный пут — это Protective Put.',
+    no:'Включите базовый актив в портфеле и поставьте тип PUT.' },
+  { id:6, title:'Найди ошибку', pos:'call', setup:{S:120,K:100,P:5},
+    text:'Утверждение: «прибыль = разница цены и страйка». Это ошибка. Какой правильный P/L на экспирации (₽)? Смотрите текущие параметры.',
+    field:'ans',
+    check:(ans) => lab.pos==='call' && Number(ans)===Number(pl('call', lab.S, lab.K, lab.P)),
+    ok:'Верно: из внутренней стоимости нужно вычесть премию.',
+    no:'P/L покупателя колла = внутренняя стоимость минус премия. Смотрите число «P/L сейчас» на графике.' },
+  { id:7, title:'Временная стоимость', pos:'call', setup:{S:100,K:100,P:5},
+    text:'ATM Call, внутренняя стоимость 0, премия 5 ₽. Есть ли временная стоимость?',
+    options:['Нет','Да, премия сверх внутренней'],
+    check:(ans) => Number(ans)===1,
+    ok:'При нулевой внутренней положительная премия — временная составляющая (и другие факторы, включая IV).',
+    no:'Да: премия может быть > 0 при ATM до экспирации.' },
+  { id:8, title:'Исследуй IV', pos:'call', setup:{S:100,K:100,P:5},
+    text:'IV 20% → 30%, прочее равно. Как обычно меняется стоимость опциона?',
+    options:['Обычно повышается','Обязательно падает','Гарантирует прибыль'],
+    check:(ans) => Number(ans)===0,
+    ok:'При прочих равных повышение IV обычно повышает стоимость.',
+    no:'Не гарантия прибыли, но обычно премия выше.' },
+  { id:9, title:'Сравни Call и Put', pos:'cmp', setup:{S:120,K:100,P:5},
+    text:'При цене актива 120 ₽, страйке 100 ₽ и премии 5 ₽ какой P/L больше у Long Call или Long Put?',
+    options:['Call больше','Put больше','Одинаково'],
+    check:(ans) => Number(ans)===0,
+    ok:'Call +15, Put −5.',
+    no:'Call ITM +15, Put OTM −5.' },
+  { id:10, title:'Финальный кейс', pos:'put', setup:{S:90,K:100,P:5,hold:true,S0:100},
+    text:'Базовый актив уже в портфеле. Оставьте PUT и выставьте цену актива 90 ₽. Введите P/L связки (₽).',
+    field:'ans',
+    check:(ans) => !!lab.hold && lab.pos==='put' && lab.S===90 && Number(ans)===Number(pl('prot', lab.S, lab.K, lab.P, lab.S0)),
+    ok:'Комбинация ограничивает падение ценой премии.',
+    no:'P/L = изменение цены актива + выплата пута − премия.' },
+]
+
+
+const ADVANCED_MODULES = [
+  { id: 1, title: 'Цена и риск', lessons: [1, 2, 3] },
+  { id: 2, title: 'Стратегии с одной ногой', lessons: [4, 5, 6, 7] },
+  { id: 3, title: 'Связки и спреды', lessons: [8, 9, 10, 11] },
+  { id: 4, title: 'Границы курса', lessons: [12] },
+]
+
+const ADVANCED_LESSONS = [
+  { id: 1, module: 1, title: 'P/L на экспирации и цена до неё', minutes: 8, body: [
+    'В базовом курсе результат считался только на экспирации. До экспирации цена опциона обычно не равна внутренней стоимости: есть время и подразумеваемая волатильность.',
+    'Нельзя переносить P/L на экспирации на текущую котировку опциона. Это разные величины.',
+  ], example: 'ATM-колл при цене актива равной страйку может стоить несколько рублей до экспирации при нулевой внутренней. На экспирации временная составляющая сгорает.',
+    takeaways: ['P/L на экспирации ≠ текущая цена опциона.', 'До экспирации есть время и IV.', 'Это не прогноз цены.'] },
+  { id: 2, module: 1, title: 'Покупатель и продавец: разный риск', minutes: 8, body: [
+    'У покупателя опциона убыток ограничен премией. У продавца колла при сильном росте цены базового актива убыток может быть очень большим.',
+    'Курс не учит продавать опционы и не даёт сигналов. Нужно понимать, почему «получить премию» не значит «низкий риск».',
+  ], example: 'Продали колл со страйком 100 за премию 5. Если цена актива 200 на экспирации, убыток продавца большой. Покупатель этого колла в плюсе.',
+    takeaways: ['Покупатель: риск ограничен премией.', 'Продавец колла: риск роста может быть большим.', 'Не торговая рекомендация.'] },
+  { id: 3, module: 1, title: 'Что входит в премию', minutes: 8, body: [
+    'Упрощённо премия = внутренняя стоимость + временная стоимость. Временная часть связана с тем, что до экспирации цена актива ещё может измениться, и с волатильностью.',
+    'Нельзя сказать, что премия больше нуля «только из‑за времени»: меняются и другие параметры.',
+  ], example: 'Страйк равен цене актива, внутренняя стоимость 0, премия 4 ₽ — это временная составляющая (и другие факторы, включая IV).',
+    takeaways: ['Внутренняя и временная части премии.', 'На экспирации временная часть сгорает.', 'IV влияет на премию при прочих равных.'] },
+  { id: 4, module: 2, title: 'Long Call', minutes: 8, body: [
+    'Long Call: покупка колла. Учебный расчёт на экспирации: максимум из нуля и (цена базового актива − страйк) минус премия.',
+    'Безубыток: страйк + премия. Убыток покупателя ограничен премией. Это конструкция на рост, не сигнал покупать.',
+  ], example: 'Страйк 100, премия 5, цена 120: (120−100)−5 = +15. Цена 90: −5.',
+    takeaways: ['Колл — право купить.', 'Риск покупателя — премия.', 'Не сигнал к сделке.'] },
+  { id: 5, module: 2, title: 'Long Put', minutes: 8, body: [
+    'Long Put: покупка пута. На экспирации: максимум из нуля и (страйк − цена базового актива) минус премия.',
+    'Безубыток: страйк − премия. Это конструкция на падение или страховка, не сигнал продавать актив.',
+  ], example: 'Страйк 100, премия 5, цена 80: (100−80)−5 = +15. Цена 120: −5.',
+    takeaways: ['Пут — право продать.', 'Риск покупателя — премия.', 'Не сигнал.'] },
+  { id: 6, module: 2, title: 'Protective Put', minutes: 8, body: [
+    'Protective Put = базовый актив в портфеле + купленный пут. Падение актива ограничивается страйком пута, цена страховки — премия.',
+    'Если актив растёт, результат хуже, чем без пута, ровно на уплаченную премию.',
+  ], example: 'Актив куплен по 100, страйк 100, премия 5. При цене 80 P/L связки около −5. Без пута было бы −20.',
+    takeaways: ['Нужен актив в портфеле.', 'Пут ограничивает падение.', 'Страховка стоит премии.'] },
+  { id: 7, module: 2, title: 'Covered Call', minutes: 8, body: [
+    'Covered Call в учебной схеме: есть базовый актив и продаётся колл. Премия может частично компенсировать боковик, но участие в сильном росте ограничено страйком.',
+    'Курс не советует выписывать коллы. Реальные лот, маржа и налоги не моделируются.',
+  ], example: 'Актив куплен по 100, продан колл со страйком 110 за 3. При цене 150 рост выше 110 уходит покупателю колла.',
+    takeaways: ['Актив покрывает проданный колл.', 'Сильный рост ограничен.', 'Не совет выписывать коллы.'] },
+  { id: 8, module: 3, title: 'Воротник (collar)', minutes: 8, body: [
+    'Учебный воротник: базовый актив + купленный пут + проданный колл. Пут задаёт пол, колл — потолок. Премия колла частично оплачивает пут.',
+    'Диапазон результата уже, чем у голого актива. Это схема, не рекомендация собирать воротник на рынке.',
+  ], example: 'Актив 100, пут 95, колл 110. Падение ниже 95 ограничивает пут, рост выше 110 — отданный покупателю колла.',
+    takeaways: ['Пол и потолок.', 'Уже диапазон, чем у актива.', 'Не сигнал.'] },
+  { id: 9, module: 3, title: 'Вертикальный спред', minutes: 9, body: [
+    'Бычий дебетный спред: покупка колла с меньшим страйком и продажа колла с большим. Риск ограничен нетто-премией, прибыль ограничена разницей страйков минус нетто-премия.',
+    'Медвежий дебетный спред строится на путах зеркально. Курс не учит подбирать страйки под рынок.',
+  ], example: 'Купили колл 100 за 6, продали колл 110 за 2. Нетто-затрата 4. Максимум на экспирации около 6, если цена выше 110.',
+    takeaways: ['Два страйка одного типа.', 'Риск и прибыль ограничены.', 'Учебная схема, не сигнал.'] },
+  { id: 10, module: 3, title: 'Long straddle', minutes: 8, body: [
+    'Long straddle: покупка колла и пута с одним страйком. Нужен сильный ход цены в любую сторону, чтобы покрыть две премии.',
+    'Если цена останется у страйка, обе ноги истекают с потерей премий. Это не ставка «рынок вырастет».',
+  ], example: 'Страйк 100, колл 5, пут 5. Чтобы выйти в ноль, цена должна уйти примерно на 10 от страйка (без учёта других факторов).',
+    takeaways: ['Один страйк, колл + пут.', 'Нужен большой ход.', 'Риск — сумма премий.'] },
+  { id: 11, module: 3, title: 'Long strangle', minutes: 8, body: [
+    'Long strangle: колл и пут с разными страйками, обычно оба вне денег. Премии часто меньше, чем у стреддла, но нужен ещё больший ход.',
+    'Не утверждаем, что стренгл «лучше» стреддла: зависит от страйков, премий и того, куда уйдёт цена.',
+  ], example: 'Пут 90 за 2, колл 110 за 2. Ход должен перекрыть 4 ₽ и расстояние до страйков.',
+    takeaways: ['Разные страйки.', 'Дешевле по премии, дальше до безубытка.', 'Не сигнал.'] },
+  { id: 12, module: 4, title: 'Что курс сознательно не считает', minutes: 8, body: [
+    'Нет живых котировок, лота, комиссий, налогов и полного набора контрактов биржи. Греки и точная формула цены до экспирации в этом курсе не становятся торговым калькулятором.',
+    'При прочих равных рост IV обычно повышает премию и колла, и пута. Это не гарантия прибыли покупателя и не прогноз направления базового актива.',
+  ], example: 'IV выросла, остальные параметры те же — премия обычно выше. Цена актива при этом может не измениться так, как вы ждали.',
+    takeaways: ['Нет live-рынка и полного MOEX.', 'IV ≠ направление актива.', 'Нет сигналов и обещания дохода.'] },
+]
+
+function aq(text, options, answer, explain) {
+  return { text: text, options: options, answer: answer, explain: explain }
+}
+
+const ADVANCED_QUIZZES = {
+  1: [
+    aq('P/L на экспирации равен текущей цене опциона?', ['Да, всегда', 'Нет, до экспирации цена включает время и IV', 'Только для путов', 'Только на бирже'], 1, 'Это разные величины.'),
+    aq('Временная стоимость на экспирации:', ['Удваивается', 'Сгорает', 'Равна страйку', 'Равна IV'], 1, 'Остаётся внутренняя выплата.'),
+    aq('Можно ли по P/L на экспирации предсказать котировку завтра?', ['Да', 'Нет', 'Только если IV=0', 'Только для колла'], 1, 'Модель не прогноз.'),
+    aq('ATM до экспирации при премии > 0 означает:', ['Ошибку учёта', 'Возможна временная стоимость', 'Обязательный ITM', 'Шорт'], 1, 'Внутренняя около 0.'),
+    aq('Материал — указание купить опцион?', ['Да', 'Нет', 'Да, если IV растёт', 'Да на бирже'], 1, 'Только обучение.'),
+  ],
+  2: [
+    aq('Максимальный убыток покупателя опциона:', ['Неограничен', 'Премия', 'Страйк', 'Цена актива'], 1, 'Покупатель теряет премию.'),
+    aq('Риск продавца колла при сильном росте:', ['Нулевой', 'Может быть большим', 'Всегда 1 ₽', 'Равен налогу'], 1, 'Асимметрия.'),
+    aq('Курс учит продавать голые коллы?', ['Да', 'Нет', 'Только в пятницу', 'Через брокера'], 1, 'Нет практики шорта как рекомендации.'),
+    aq('«Получить премию» значит низкий риск?', ['Да', 'Нет, зависит от обязательства', 'Всегда', 'Если IV низкая'], 1, 'Обязательство продавца.'),
+    aq('Это сигнал открыть шорт?', ['Да', 'Нет', 'Да от регулятора', 'Да от брокера'], 1, 'Нет сигналов.'),
+  ],
+  3: [
+    aq('Временная стоимость — это:', ['Налог', 'Часть премии сверх внутренней', 'Размер лота', 'Страйк'], 1, 'Упрощённо.'),
+    aq('На экспирации временная часть:', ['Растёт', 'Сгорает', 'Становится IV', 'Равна страйку'], 1, 'Остаётся внутренняя.'),
+    aq('IV при прочих равных обычно:', ['Не влияет', 'Влияет на премию', 'Меняет тикер', 'Обнуляет страйк'], 1, 'Качественно.'),
+    aq('Премия > 0 только из‑за времени?', ['Да всегда', 'Нет, формулировка слишком жёсткая', 'Премия всегда 0', 'Только для фьючерсов'], 1, 'Есть и другие факторы.'),
+    aq('Внутренняя стоимость ATM:', ['Около нуля', 'Равна цене актива', 'Всегда 100', 'Равна IV'], 0, 'Цена около страйка.'),
+  ],
+  4: [
+    aq('Long Call на экспирации:', ['Всегда прибыль', 'Внутренняя стоимость минус премия', 'Только премия', 'Страйк минус цена'], 1, 'Формула покупателя колла.'),
+    aq('Безубыток колла:', ['Страйк минус премия', 'Страйк плюс премия', 'Только страйк', 'Ноль'], 1, 'Страйк + премия.'),
+    aq('Риск покупателя колла:', ['Неограничен', 'Ограничен премией', 'Равен страйку', 'Равен цене актива'], 1, 'Премия.'),
+    aq('Long Call — сигнал купить сейчас?', ['Да', 'Нет', 'Да при росте IV', 'Да на дивидендах'], 1, 'Конструкция, не сигнал.'),
+    aq('Если цена ниже страйка на экспирации, колл:', ['Даёт выплату страйка', 'Истекает без внутренней стоимости', 'Превращается в пут', 'Удваивает премию'], 1, 'OTM.'),
+  ],
+  5: [
+    aq('Long Put на экспирации:', ['Цена минус страйк', 'Внутренняя стоимость минус премия', 'Всегда −премия', 'IV минус страйк'], 1, 'Пут.'),
+    aq('Безубыток пута:', ['Страйк плюс премия', 'Страйк минус премия', 'Ноль', 'Цена актива'], 1, 'Страйк − премия.'),
+    aq('Покупатель пута выигрывает от:', ['Роста актива', 'Падения актива ниже страйка с запасом на премию', 'Нулевой IV всегда', 'Отмены экспирации'], 1, 'Падение.'),
+    aq('Long Put — приказ продать акции?', ['Да', 'Нет', 'Да через брокера', 'Да если дивиденды'], 1, 'Не приказ.'),
+    aq('Пут OTM, когда:', ['Цена ниже страйка', 'Цена выше страйка', 'Всегда', 'Никогда'], 1, 'Нет внутренней.'),
+  ],
+  6: [
+    aq('Protective Put состоит из:', ['Только колла', 'Базовый актив + купленный пут', 'Двух шортов', 'Только IV'], 1, 'Страховка.'),
+    aq('При падении актива пут:', ['Усиливает падение', 'Ограничивает падение ценой страховки', 'Запрещён', 'Меняет тикер'], 1, 'Пол.'),
+    aq('Премия пута при росте актива:', ['Улучшает результат на премию', 'Ухудшает результат на уплаченную премию', 'Обнуляет цену', 'Равна страйку'], 1, 'Цена страховки.'),
+    aq('Нужен ли актив в портфеле?', ['Нет', 'Да, иначе это просто long put', 'Только по пятницам', 'Только для колла'], 1, 'В этом и смысл связки.'),
+    aq('Гарантия прибыли?', ['Да', 'Нет', 'Да на экспирации', 'Да при ATM'], 1, 'Нет гарантий.'),
+  ],
+  7: [
+    aq('Covered Call учебно — это:', ['Только пут', 'Базовый актив + проданный колл', 'Два лонга колла', 'Фьючерс'], 1, 'Покрытый колл.'),
+    aq('Сильный рост при covered call:', ['Полностью ваш', 'Ограничен страйком проданного колла', 'Запрещён', 'Равен IV'], 1, 'Потолок.'),
+    aq('Это совет выписывать коллы?', ['Да', 'Нет', 'Да если дивиденды', 'Да при IV 30%'], 1, 'Не рекомендация.'),
+    aq('Премия проданного колла в боковике:', ['Всегда убыток', 'Может частично компенсировать боковик', 'Обнуляет страйк', 'Это налог'], 1, 'Учебно.'),
+    aq('Модель учитывает лот биржи?', ['Да', 'Нет', 'Только НДС', 'Только клиринг'], 1, 'Абстракция.'),
+  ],
+  8: [
+    aq('Воротник включает:', ['Только колл', 'Актив + пут + проданный колл', 'Два стреддла', 'Только IV'], 1, 'Пол и потолок.'),
+    aq('Купленный пут в воротнике:', ['Задаёт пол', 'Задаёт потолок', 'Отменяет актив', 'Равен налогу'], 0, 'Защита падения.'),
+    aq('Проданный колл в воротнике:', ['Задаёт пол', 'Ограничивает участие в росте', 'Удваивает актив', 'Запрещён'], 1, 'Потолок.'),
+    aq('Диапазон результата:', ['Шире, чем у актива', 'Уже, чем у голого актива', 'Бесконечен', 'Равен IV'], 1, 'Уже.'),
+    aq('Это сигнал собрать воротник?', ['Да', 'Нет', 'Да от биржи', 'Да при отчёте'], 1, 'Схема, не сигнал.'),
+  ],
+  9: [
+    aq('Бычий дебетный спред по коллам:', ['Покупка дальнего и продажа ближнего страйка', 'Покупка колла с меньшим страйком и продажа с большим', 'Только два пута ATM', 'Шорт актива'], 1, 'Дебет.'),
+    aq('Риск такого спреда:', ['Неограничен', 'Ограничен нетто-премией', 'Равен цене актива', 'Равен IV'], 1, 'Нетто-затрата.'),
+    aq('Прибыль:', ['Неограничена', 'Ограничена разницей страйков минус нетто-премия', 'Всегда 100 ₽', 'Равна дивиденду'], 1, 'Потолок.'),
+    aq('Курс подбирает страйки под рынок?', ['Да', 'Нет', 'Да по IV', 'Да по новостям'], 1, 'Нет подбора под рынок.'),
+    aq('Медвежий дебетный спред обычно на:', ['Двух коллах ITM обязательно', 'Путах (покупка выше, продажа ниже — в учебной схеме)', 'Только фьючерсе', 'Налоге'], 1, 'Порты путов.'),
+  ],
+  10: [
+    aq('Long straddle — это:', ['Два колла с разными страйками', 'Колл и пут с одним страйком', 'Только шорт пута', 'Актив без опциона'], 1, 'Один страйк.'),
+    aq('Чтобы окупить две премии, нужен:', ['Боковик', 'Сильный ход цены', 'Нулевой IV всегда', 'Отмена экспирации'], 1, 'Большой ход.'),
+    aq('Если цена осталась у страйка:', ['Максимум прибыли', 'Потеря премий обеих ног', 'Выплата страйка', 'Налог 0'], 1, 'Обе OTM.'),
+    aq('Это ставка только на рост?', ['Да', 'Нет, ход в любую сторону', 'Да только колл', 'Да только пут'], 1, 'Любая сторона.'),
+    aq('Риск покупателя стреддла:', ['Неограничен', 'Сумма премий', 'Два страйка', 'Цена актива'], 1, 'Две премии.'),
+  ],
+  11: [
+    aq('Long strangle отличается тем, что:', ['Один страйк', 'Колл и пут с разными страйками', 'Нет премии', 'Это фьючерс'], 1, 'Разные страйки.'),
+    aq('Премии стренгла часто:', ['Всегда выше стреддла', 'Могут быть меньше, чем у стреддла, при более далёких страйках', 'Всегда 0', 'Равны налогу'], 1, 'OTM ноги.'),
+    aq('До безубытка ход нужен:', ['Меньше, чем у стреддла всегда', 'Часто больше, чем у стреддла', 'Нулевой', 'Обратный'], 1, 'Дальше страйки.'),
+    aq('Стренгл всегда лучше стреддла?', ['Да', 'Нет, зависит от страйков, премий и хода цены', 'Да на бирже', 'Да при IV'], 1, 'Нельзя утверждать «лучше».'),
+    aq('Сигнал купить стренгл?', ['Да', 'Нет', 'Да в отчётность', 'Да в пятницу'], 1, 'Нет сигнала.'),
+  ],
+  12: [
+    aq('Греки как торговый калькулятор в этом курсе:', ['Обязательны', 'Не являются готовым калькулятором сделок', 'Заменяют страйк', 'Равны P/L'], 1, 'Вне такого применения.'),
+    aq('Рост IV при прочих равных обычно:', ['Понижает премию', 'Повышает стоимость опциона', 'Гарантирует прибыль', 'Меняет тикер'], 1, 'Качественно.'),
+    aq('IV предсказывает направление базового актива?', ['Да', 'Нет', 'Только вверх', 'Только вниз'], 1, 'Нет.'),
+    aq('Точная новая премия только из IV?', ['Да всегда', 'Нет, так утверждать нельзя', 'Да на любой бирже', 'Да по ЦБ'], 1, 'Другие факторы.'),
+    aq('Живые котировки в курсе?', ['Да', 'Нет', 'Через брокер', 'По WebSocket'], 1, 'Нет live.'),
+  ],
+}
+
+const ADVANCED_TRAINER = [
+  { id: 1, type: 'single', text: 'Почему P/L на экспирации нельзя считать текущей ценой опциона?',
+    options: ['Можно всегда', 'До экспирации есть время и IV', 'Биржа запрещает P/L', 'Страйк равен IV'],
+    answer: 1, explainOk: 'Разные величины.', explainNo: 'До экспирации цена ≠ внутренняя выплата.' },
+  { id: 2, type: 'single', text: 'Protective Put — это:',
+    options: ['Только колл', 'Базовый актив + купленный пут', 'Два шорта', 'Только премия'],
+    answer: 1, explainOk: 'Страховка путом.', explainNo: 'Нужен актив в портфеле.' },
+  { id: 3, type: 'single', text: 'Covered Call учебно — это:',
+    options: ['Только long put', 'Базовый актив + проданный колл', 'Naked short put', 'Календарный спред'],
+    answer: 1, explainOk: 'Покрытый колл.', explainNo: 'Нужен актив и проданный колл.' },
+  { id: 4, type: 'numeric', text: 'Protective Put: актив куплен по 100, страйк 100, премия 5, цена 80. P/L связки (₽)?',
+    answer: -5, hint: 'Изменение цены актива + выплата пута − премия',
+    explainOk: '(80−100)+20−5 = −5.', explainNo: 'Пол около минус премии.' },
+  { id: 5, type: 'single', text: 'Long straddle требует:',
+    options: ['Боковика', 'Сильного хода цены', 'Нулевой премии', 'Только роста'],
+    answer: 1, explainOk: 'Две премии надо окупить ходом.', explainNo: 'Боковик сжигает обе премии.' },
+  { id: 6, type: 'single', text: 'Вертикальный дебетный спред:',
+    options: ['Даёт неограниченную прибыль', 'Ограничивает и риск, и прибыль', 'Это фьючерс', 'Гарантирует доход'],
+    answer: 1, explainOk: 'Оба края ограничены.', explainNo: 'Не «бесконечный» колл.' },
+  { id: 7, type: 'single', text: 'Рост IV гарантирует прибыль покупателю?',
+    options: ['Да', 'Нет', 'Только по коллам', 'Только в одной стране'],
+    answer: 1, explainOk: 'Нет гарантии прибыли.', explainNo: 'IV ≠ прибыль.' },
+  { id: 8, type: 'single', text: 'Материал курса — это сигнал открыть сделку?',
+    options: ['Да', 'Нет', 'Да после тестов', 'Да в лаборатории'],
+    answer: 1, explainOk: 'Только обучение.', explainNo: 'Нет сигналов.' },
+]
+
+
+function rocket(){
+  return `<svg width="40" height="40" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <rect width="64" height="64" fill="#F5F6FA"/>
+    <g stroke-width="7" stroke-linecap="round">
+      <path d="M12 52 L32 32" stroke="#E17055"/>
+      <path d="M32 32 L52 12" stroke="#00B894"/>
+      <path d="M12 12 L32 32" stroke="#00B894"/>
+      <path d="M32 32 L52 52" stroke="#E17055"/>
+    </g>
+    <path d="M32 20 L44 32 L32 44 L20 32 Z" fill="#6C5CE7"/>
+  </svg>`
+}
+function tabIcon(name,on){
+  const c=on?'#6C5CE7':'#9AA0A6'
+  if(name==='home') return `<svg width="22" height="22" fill="none" stroke="${c}" stroke-width="2"><path d="M3 10 L11 3 L19 10 V18 A2 2 0 0 1 17 20 H5 A2 2 0 0 1 3 18Z"/></svg>`
+  if(name==='course') return `<svg width="22" height="22" fill="none" stroke="${c}" stroke-width="2"><rect x="4" y="3" width="14" height="16" rx="2"/><path d="M8 8h8M8 12h8"/></svg>`
+  if(name==='lab') return `<svg width="22" height="22" fill="none" stroke="${c}" stroke-width="2"><path d="M9 3h4v7l5 8H4l5-8V3z"/></svg>`
+  return `<svg width="22" height="22" fill="none" stroke="${c}" stroke-width="2"><circle cx="11" cy="8" r="3"/><path d="M4 19c1.5-3 4-5 7-5s5.5 2 7 5"/></svg>`
+}
+function doneCount(p){return LESSONS.filter(function(l){return p.lessons[l.id]==='completed'}).length}
+function nextLesson(p){
+  for(var i=1;i<=10;i++){ if(p.lessons[i]!=='completed') return i }
+  return 10
+}
+function unlocked(p,id){
+  if(id===1) return true
+  return !!(p.quizzes[id-1] && p.quizzes[id-1].passed)
+}
+function missionCount(p){
+  return Object.keys((p && p.missions) || {}).filter(function(k){return p.missions[k]}).length
+}
+function trainerOpen(p){ return missionCount(p) >= 10 }
+function v3Open(){
+  var u=user(); if(!u) return false
+  try { return !!accessOf(u.progress).advanced_course_unlocked } catch(e){ return !!(u.access && u.access.advanced_course_unlocked) }
+}
+function v3Card(){
+  var p=user().progress, open=v3Open()
+  var need=[]
+  if(doneCount(p)<10) need.push('уроки '+doneCount(p)+'/10')
+  var tests=LESSONS.filter(function(l){return p.quizzes[l.id]&&p.quizzes[l.id].passed}).length
+  if(tests<10) need.push('тесты '+tests+'/10')
+  if(!p.trainer.completed) need.push('финальный тренажёр')
+  return `<a class="card" href="#/app/advanced" style="display:flex;justify-content:space-between;align-items:center;background:${open?'#F7F5FF':'#fff'}">
+    <div>
+      <div class="pill">${open?'Открыт':'Закрыт'}</div>
+      <b>${open?'':'🔒 '}Продвинутый курс</b>
+      <div class="sub">${open?'5 уроков: цена до экспирации, риск, конструкции':'Цель после базы: '+need.join(' · ')}</div>
+    </div><span>›</span>
+  </a>`
+}
+function v3UnlockedLesson(p,id){
+  if(id===1) return true
+  return !!(p.advancedQuizzes && p.advancedQuizzes[id-1] && p.advancedQuizzes[id-1].passed)
+}
+function v3CourseBlock(){
+  var open=v3Open(), p=user().progress
+  var head=`<p class="muted" style="font-weight:700;margin:18px 0 8px">Продвинутый курс</p>`
+  if(!open){
+    return head+`<div class="card">
+      <b>🔒 Пока закрыт — и это нормально</b>
+      <p class="muted">Пройдите базовый курс целиком, чтобы открыть следующий уровень.</p>
+      <ul class="muted">
+        <li>10 уроков базового курса</li>
+        <li>10 тестов</li>
+        <li>10 миссий лаборатории</li>
+        <li>Финальный тренажёр</li>
+      </ul>
+      <a class="btn btn-p" href="#/app">К прогрессу</a>
+    </div>`
+  }
+  var tot=ADVANCED_LESSONS.length
+  var htmlx = head
+  ADVANCED_MODULES.forEach(function(mod){
+    htmlx += `<p class="muted" style="font-weight:700;margin:14px 0 8px">${mod.title}</p>`
+    htmlx += mod.lessons.map(function(id){
+      var l=ADVANCED_LESSONS.find(function(x){return x.id===id})
+      var done=p.advancedLessons && p.advancedLessons[id]==='completed'
+      var un=v3UnlockedLesson(p,id)
+      return `<a class="lesson ${un&&!done?'on':''} ${un?'':'lock'}" href="${un?'#/adv/lesson/'+id:'#/app/advanced'}">
+        <div class="ncirc ${done?'done':''}">${done?'✓':id}</div>
+        <div style="flex:1"><b>${l.title}</b></div>
+        <div>${done?'':(un?'›':'🔒')}</div>
+      </a>`
+    }).join('')
+  })
+  var acc=accessOf(p)
+  htmlx += acc.advanced_trainer_unlocked
+    ? `<a class="btn btn-p" href="#/adv/trainer">Продвинутый тренажёр</a>`
+    : `<p class="muted">Продвинутый тренажёр откроется после ${tot} тестов.</p>`
+  return htmlx
+}
+function trainerLockedCard(){
+  var n = missionCount(user().progress)
+  return shell('lab', `
+    ${topBack('Тренажёр', '#/app/lab')}
+    <div class="card" style="text-align:center;padding:28px">
+      <div style="font-size:36px">🔒</div>
+      <h2>Финальный тест закрыт</h2>
+      <p class="muted">Сначала выполните 10 миссий лаборатории. Сейчас ${n} из 10.</p>
+      <a class="btn btn-p" href="#/app/lab">К миссиям</a>
+    </div>
+  `)
+}
+function pctOf(p){
+  var d=doneCount(p)
+  var m=Object.keys(p.missions||{}).filter(function(k){return p.missions[k]}).length
+  return Math.min(100, Math.round(d*8 + m*2 + (p.trainer.best||0)))
+}
+function initials(email){return String(email||'U').charAt(0).toUpperCase()}
+
+function shell(tab, inner, top){
+  var u=user()
+  return `<div class="phone">
+    <div class="safe">
+      ${top||''}
+      ${inner}
+    </div>
+    <nav class="tabs-bottom">
+      <a href="#/app" class="${tab==='home'?'on':''}">${tabIcon('home',tab==='home')}Главная</a>
+      <a href="#/app/course" class="${tab==='course'?'on':''}">${tabIcon('course',tab==='course')}Курс</a>
+      <a href="#/app/lab" class="${tab==='lab'?'on':''}">${tabIcon('lab',tab==='lab')}Тренажёр</a>
+      <a href="#/app/profile" class="${tab==='profile'?'on':''}">${tabIcon('me',tab==='profile')}Профиль</a>
+    </nav>
+  </div>`
+}
+function topHome(){
+  var u=user()
+  return `<div class="topnav">
+    <div class="brandrow"><div class="hero-mark">${rocket()}</div><div><b>Опционы</b><div class="sub">учебный тренажёр</div></div></div>
+    <div class="avatar">${initials(u.email)}</div>
+  </div>`
+}
+function topBack(title, href){
+  return `<div class="topnav">
+    <a class="iconbtn" href="${href||'#/app/course'}">←</a>
+    <b>${title||''}</b>
+    <span style="width:44px"></span>
+  </div>`
+}
+
+function landing(){
+  var u=user()
+  return `<div class="phone"><div class="safe" style="padding-top:48px">
+    <div class="hero-mark" style="width:56px;height:56px;font-size:28px;margin-bottom:16px">${rocket()}</div>
+    <h1>Опционы —<br>учебный тренажёр</h1>
+    <p class="muted">Обучающая платформа: 10 уроков, тесты и лаборатория P/L. Без реальных сделок.</p>
+    <div class="card"><b>Как учиться</b><p class="muted">Урок → тест → следующий урок. Лаборатория — учебный P/L на экспирации.</p></div>
+    <a class="btn btn-p" href="${u?'#/app':'#/register'}">${u?'Продолжить обучение':'Начать обучение'}</a>
+    <div style="height:10px"></div>
+    ${u?'':`<a class="btn btn-o" href="#/login">Войти</a>`}
+  </div></div>`
+}
+function auth(mode){
+  return `<div class="phone"><div class="authbox">
+    <a href="#/" class="brandrow" style="margin-bottom:24px"><div class="hero-mark">${rocket()}</div><b>Опционы</b></a>
+    <h1>${mode==='r'?'Регистрация':'Вход'}</h1>
+    <p class="muted">Прогресс хранится в этом браузере.</p>
+    <form id="f">
+      <label>Email</label><input type="email" id="email" required autocomplete="username">
+      <label>Пароль</label><input type="password" id="pass" required autocomplete="current-password">
+      <p id="err" class="no err"></p>
+      <div style="height:16px"></div>
+      <button class="btn btn-p" type="submit">${mode==='r'?'Создать аккаунт':'Войти'}</button>
+    </form>
+    <p class="muted" style="margin-top:16px;text-align:center">${mode==='r'?'Уже есть аккаунт? <a href="#/login"><b>Войти</b></a>':'Нет аккаунта? <a href="#/register"><b>Регистрация</b></a>'}</p>
+  </div></div>`
+}
+
+function missionsBlock(){
+  var p=user().progress.missions||{}
+  var n=Object.keys(p).filter(function(k){return p[k]}).length
+  return `<div class="acc card" data-acc style="padding:0;overflow:hidden">
+    <b style="display:flex;align-items:center;gap:10px;padding:16px">
+      <div style="flex:1">
+        <div class="pill">Тренажёр</div>
+        <div>Лаборатория опционов</div>
+        <div class="sub">Миссии ${n}/10</div>
+      </div>
+      <span>▾</span>
+    </b>
+    <div class="hid" style="padding:0 12px 12px">
+      <a class="btn btn-o" href="#/app/lab" style="margin-bottom:8px">Открыть лабораторию</a>
+      ${MISSIONS.map(function(m){
+        var done=!!p[m.id]
+        return `<a class="lesson" href="#/app/lab" data-mid="${m.id}">
+          <div class="ncirc ${done?'done':''}">${done?'✓':m.id}</div>
+          <div style="flex:1"><b>${m.title}</b></div>
+          <span>${done?'готово':'›'}</span>
+        </a>`
+      }).join('')}
+    </div>
+  </div>`
+}
+function homePage(){
+  var p=user().progress, d=doneCount(p), n=nextLesson(p), pct=pctOf(p), miss=Object.keys(p.missions||{}).filter(function(k){return p.missions[k]}).length
+  var L=LESSONS[n-1]
+  return shell('home', `
+    <div class="card">
+      <div class="muted" style="font-weight:700;margin-bottom:8px">Ваш прогресс</div>
+      <div class="prog">
+        <div class="ring" style="--pct:${pct}" data-v="${pct}%"></div>
+        <div><b>Базовый курс</b><div class="sub">Урок ${d} из 10</div>
+        <div style="height:10px"></div>
+        <a class="btn btn-p" href="#/lesson/${n}">Продолжить обучение</a></div>
+      </div>
+    </div>
+    <div class="muted" style="font-weight:700;margin:8px 0">Сегодня</div>
+    <div class="card">
+      <div class="brandrow"><div class="ncirc">${n}</div><div><b>Урок ${n}. ${L.title}</b><div class="sub">${L.minutes} мин</div></div></div>
+      <div style="height:12px"></div>
+      <a class="btn btn-p" href="#/lesson/${n}">Начать урок</a>
+    </div>
+    ${missionsBlock()}
+    ${v3Card()}
+    <div class="muted" style="font-weight:700;margin:8px 0">Достижения</div>
+    <div class="ach">
+      <i class="${d>=1?'':'off'}">🛡</i>
+      <i class="${d>=5?'':'off'}">⭐</i>
+      <i class="${miss>=1?'':'off'}">🔥</i>
+      <i class="${p.trainer.best>=7?'':'off'}">🏅</i>
+    </div>
+  `, topHome())
+}
+
+function coursePage(){
+  var p=user().progress
+  return shell('course', `
+    <div class="topnav"><a class="iconbtn" href="#/app">←</a><b>Базовый курс</b><span style="font-size:22px">🏆</span></div>
+    <p class="muted" style="font-weight:700;margin:4px 0 8px">Базовый курс</p>
+    ${LESSONS.map(function(l){
+      var done=p.lessons[l.id]==='completed'
+      var open=unlocked(p,l.id)
+      var cur=!done && open
+      var href=open?('#/lesson/'+l.id):'#/app/course'
+      return `<a class="lesson ${cur?'on':''} ${open?'':'lock'}" href="${href}">
+        <div class="ncirc ${done?'done':''}">${done?'✓':l.id}</div>
+        <div style="flex:1"><b>${l.title}</b></div>
+        <div>${done?'':(open?'›':'🔒')}</div>
+      </a>`
+    }).join('')}
+  `)
+}
+
+function lessonPage(n){
+  var l=LESSONS.find(function(x){return x.id===n}); if(!l) return homePage()
+  var p=user().progress
+  if(!unlocked(p,n)) return coursePage()
+  mut(function(pr){ if(pr.lessons[n]!=='completed') pr.lessons[n]='in_progress' })
+  var extra=''
+  if(n===2){
+    extra=`<div class="duo"><div class="callc"><b>CALL</b><div>Право купить актив</div><svg width="100" height="36"><path d="M8 28 L40 18 L90 8" stroke="#00B894" fill="none" stroke-width="3"/></svg></div>
+    <div class="putc"><b>PUT</b><div>Право продать актив</div><svg width="100" height="36"><path d="M8 8 L40 18 L90 28" stroke="#E17055" fill="none" stroke-width="3"/></svg></div></div>`
+  }
+  return shell('course', `
+    ${topBack(n+' / 10', '#/app/course')}
+    <div class="bar"><i style="width:${n*10}%"></i></div>
+    <div style="height:12px"></div>
+    <h1>${n===2?'Опционы CALL и PUT':l.title}</h1>
+    ${l.body.map(function(t){return '<p>'+t+'</p>'}).join('')}
+    ${extra}
+    <div class="acc open" data-acc><b>Ключевые моменты <span>▾</span></b><div class="hid"><ul>${l.takeaways.map(function(t){return '<li>'+t+'</li>'}).join('')}</ul></div></div>
+    <div class="acc" data-acc><b>Пример <span>▾</span></b><div class="hid">${l.example}</div></div>
+    <div class="rowbtns">
+      <a class="btn btn-o" href="${n>1?'#/lesson/'+(n-1):'#/app/course'}">Назад</a>
+      <a class="btn btn-p" href="#/quiz/${n}">Далее</a>
+    </div>
+  `)
+}
+
+function quizPage(n){
+  var qs=QUIZZES[n]
+  if(!ui.quiz||ui.quiz.n!==n) ui.quiz={n:n,i:0,sel:null,checked:false,score:0,done:false,answers:[]}
+  var s=ui.quiz
+  var letters=['A','B','C','D']
+  if(s.done){
+    var ok=s.score>=4
+    return shell('course', `
+      ${topBack('Тест', '#/lesson/'+n)}
+      <div class="card" style="text-align:center;padding:28px">
+        <div style="font-size:40px">${ok?'🎉':'📘'}</div>
+        <h2>${s.score} из 5</h2>
+        <p class="muted">${ok?'Урок засчитан. Можно идти дальше.':'Нужно минимум 4 из 5. Попробуйте ещё раз.'}</p>
+        ${ok?'':`<button class="btn btn-p" id="again">Ещё раз</button>`}
+        ${ok?`<a class="btn btn-p" href="${n<10?'#/lesson/'+(n+1):'#/app/course'}">${n<10?'Следующий урок':'К курсу'}</a>`:''}
+      </div>
+    `)
+  }
+  var q=qs[s.i]
+  return shell('course', `
+    ${topBack('Тест', '#/lesson/'+n)}
+    <div class="topnav" style="margin:0"><span class="muted">Вопрос ${s.i+1}</span><span class="muted">${s.i+1} / 5</span></div>
+    <div class="bar"><i style="width:${((s.i)/5)*100}%"></i></div>
+    <div style="height:16px"></div>
+    <h2>${q.text}</h2>
+    ${q.options.map(function(o,idx){
+      return `<button class="opt ${s.sel===idx?'sel':''}" data-i="${idx}" ${s.checked?'disabled':''}><span class="letter">${letters[idx]||(idx+1)}</span><span>${o}</span></button>`
+    }).join('')}
+    ${!s.checked?`<button class="btn btn-p" id="ans" ${s.sel==null?'disabled':''}>Ответить</button>`:
+      `<div class="${s.sel===q.answer?'ok':'no'}">${s.sel===q.answer?'Верно! ':'Пока нет. '}${q.explain}</div>
+       <div style="height:10px"></div>
+       <button class="btn btn-p" id="next">${s.i===4?'Итог':'Продолжить'}</button>`}
+  `)
+}
+
+function labView(){
+  var pos=lab.pos
+  var epos=effectivePos()
+  var pval=Math.round(pl(epos,lab.S,lab.K,lab.P,lab.S0)*10)/10
+  var bev=be(epos, lab.K, lab.P, lab.S0)
+  var names={call:'CALL',put:'PUT',prot:'PUT',cmp:'CALL'}
+  var mdef=MISSIONS[ui.mission-1]
+  var doneN=Object.keys(user().progress.missions||{}).filter(function(k){return user().progress.missions[k]}).length
+  return shell('lab', `
+    ${topBack('Миссия '+ui.mission+' из 10', '#/app')}
+    <div class="card">
+      <div style="display:flex;justify-content:space-between"><b>Параметры</b><span class="muted">▾</span></div>
+      <div class="field"><span>Тип опциона</span>
+        <select id="ptype">
+          <option value="call" ${pos==='call'?'selected':''}>CALL</option>
+          <option value="put" ${pos==='put'||pos==='prot'?'selected':''}>PUT</option>
+        </select>
+      </div>
+      <div class="field"><span>Цена актива</span><b id="lab-S-val">${lab.S}</b></div>
+      <input class="slider" type="range" min="60" max="140" value="${lab.S}" data-k="S">
+      <div class="field"><span>Цена исполнения</span><b id="lab-K-val">${lab.K}</b></div>
+      <input class="slider" type="range" min="60" max="140" value="${lab.K}" data-k="K">
+      <div class="field"><span>Премия</span><b id="lab-P-val">${lab.P}</b></div>
+      <input class="slider" type="range" min="0" max="20" value="${lab.P}" data-k="P">
+      <p class="sub">Результат на экспирации.</p>
+    </div>
+    <div class="card">
+      <b>Портфель</b>
+      <div class="field"><span>Базовый актив</span>
+        <label class="tog"><input type="checkbox" id="hold" ${lab.hold?'checked':''}> ${lab.hold?'в портфеле':'нет'}</label>
+      </div>
+      ${lab.hold?`<div class="field"><span>Цена покупки</span><b id="lab-S0-val">${lab.S0}</b></div>
+      <div class="field"><span>Текущая цена</span><b id="lab-spot">${lab.S}</b></div>
+      <div>${epos==='prot'?'<span class="badge-pp">Protective Put</span>':'<span class="muted">Чтобы собрать Protective Put, выберите PUT</span>'}</div>`
+      :`<p class="sub">Включите актив, если хотите страховать портфель путом.</p>`}
+    </div>
+    <div class="card">
+      <b>График прибыли/убытка</b>
+      <div id="chart"></div>
+      <div class="mini2">
+        <div class="card"><div class="sub">Точка безубыточности</div><b id="lab-be">${bev}</b></div>
+        <div class="card"><div class="sub">P/L сейчас</div><b id="lab-pl" style="color:${pval>=0?'#00B894':'#E17055'}">${pval>=0?'+':''}${pval}</b></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="pill">Миссия ${ui.mission} · ${doneN}/10</div>
+      <p><b>${mdef.title}</b></p>
+      <p>${mdef.text}</p>
+      ${mdef.options ? mdef.options.map(function(o,i){return `<button class="opt" data-ans="${i}">${o}</button>`}).join('') :
+        (mdef.field==='ans'?`<input id="mans" type="number" placeholder="Ответ" value="${ui.missionAns||''}"><div style="height:8px"></div><button class="btn btn-p" id="mgo">Рассчитать</button>`:
+        `<button class="btn btn-p" id="mgo">Рассчитать</button>`)}
+      <div id="mfb">${ui.missionMsg?`<div class="${ui.missionOk?'ok':'no'}">${ui.missionMsg}</div>`:''}</div>
+      ${ui.missionOk && ui.mission<10?`<div style="height:8px"></div><button class="btn btn-p" id="mnext">К следующей миссии</button>`:''}
+    </div>
+    ${trainerOpen(user().progress)
+      ? '<a class="btn btn-o" href="#/trainer">Финальный тест тренажёра</a>'
+      : '<div class="card"><b>🔒 Финальный тест</b><p class="muted">Откроется после 10 миссий. Сейчас '+missionCount(user().progress)+'/10.</p></div>'}
+  `)
+}
+
+function trainerPage(retry){
+  var u=user()
+  var all=retry?TRAINER.filter(function(t){return (u.progress.trainer.lastWrong||[]).indexOf(t.id)>=0}):TRAINER
+  if(retry&&!all.length) return shell('lab', `${topBack('Повтор','#/app/profile')}<p>Нет ошибок для повтора.</p>`)
+  if(!ui.trainer||ui.trainer.retry!==retry) ui.trainer={retry:retry,i:0,sel:null,num:'',checked:false,score:0,wrong:[],done:false,list:all,answers:[]}
+  var s=ui.trainer
+  if(s.done){
+    return shell('lab', `${topBack('Результат','#/app')}<div class="card" style="text-align:center"><h2>${s.score}/${s.list.length}</h2><p class="muted">${s.score>=7?'Тренажёр засчитан.':'Нужно набрать 7 из 10.'}</p><a class="btn btn-p" href="#/app/lab">В лабораторию</a></div>`)
+  }
+  var q=s.list[s.i]
+  var letters=['A','B','C','D']
+  return shell('lab', `
+    ${topBack((retry?'Повтор ':'')+'Тренажёр', '#/app/lab')}
+    <div class="muted">${s.i+1} / ${s.list.length}</div>
+    <div class="bar"><i style="width:${(s.i/s.list.length)*100}%"></i></div>
+    <h2>${q.text}</h2>
+    ${q.type==='single'?q.options.map(function(o,idx){return `<button class="opt ${s.sel===idx?'sel':''}" data-i="${idx}"><span class="letter">${letters[idx]}</span>${o}</button>`}).join(''):`<input type="number" id="num" value="${s.num}">`}
+    ${!s.checked?`<button class="btn btn-p" id="ans">Ответить</button>`:`<div class="${(q.type==='numeric'?Number(s.num)===q.answer:s.sel===q.answer)?'ok':'no'}">${(q.type==='numeric'?Number(s.num)===q.answer:s.sel===q.answer)?q.explainOk:q.explainNo}</div><div style="height:8px"></div><button class="btn btn-p" id="next">Дальше</button>`}
+  `)
+}
+
+function profilePage(){
+  var u=user(), p=u.progress, d=doneCount(p)
+  return shell('profile', `
+    ${topHome()}
+    <div class="card" style="text-align:center">
+      <div class="avatar" style="width:64px;height:64px;margin:0 auto 8px;font-size:24px">${initials(u.email)}</div>
+      <b>${u.email}</b>
+      <p class="muted">Базовый курс · ${d}/10 уроков</p>
+    </div>
+    ${v3Card()}
+    ${trainerOpen(p)
+      ? `<a class="lesson" href="#/trainer"><div class="ncirc">✓</div><div style="flex:1">Финальный тренажёр</div><span>${p.trainer.best}/10</span></a>
+         <a class="lesson" href="#/app/retry"><div class="ncirc">↺</div><div style="flex:1">Повтор ошибок</div><span>›</span></a>`
+      : `<div class="lesson lock"><div class="ncirc">🔒</div><div style="flex:1">Финальный тренажёр</div><span>${missionCount(p)}/10 миссий</span></div>`}
+    <button class="btn btn-o" id="out">Выйти</button>
+  `)
+}
+
+function advancedHome(){
+  return shell('course', `${topBack('Продвинутый курс','#/app')}${v3CourseBlock()}`)
+}
+function advLessonPage(n){
+  if(!v3Open()) return advancedHome()
+  var l=ADVANCED_LESSONS.find(function(x){return x.id===n}); if(!l) return advancedHome()
+  var p=user().progress
+  if(!v3UnlockedLesson(p,n)) return advancedHome()
+  mut(function(pr){ pr.advancedLessons=pr.advancedLessons||{}; if(pr.advancedLessons[n]!=='completed') pr.advancedLessons[n]='in_progress' })
+  return shell('course', `
+    ${topBack(n+' / '+ADVANCED_LESSONS.length, '#/app/advanced')}
+    <div class="bar"><i style="width:${n*20}%"></i></div>
+    <div style="height:12px"></div>
+    <h1>${l.title}</h1>
+    ${l.body.map(function(t){return '<p>'+t+'</p>'}).join('')}
+    <div class="acc open" data-acc><b>Ключевые моменты <span>▾</span></b><div class="hid"><ul>${l.takeaways.map(function(t){return '<li>'+t+'</li>'}).join('')}</ul></div></div>
+    <div class="acc" data-acc><b>Пример <span>▾</span></b><div class="hid">${l.example}</div></div>
+    <a class="btn btn-p" href="#/adv/quiz/${n}">К тесту</a>
+  `)
+}
+function advQuizPage(n){
+  if(!v3Open()) return advancedHome()
+  var qs=ADVANCED_QUIZZES[n]
+  if(!ui.advQuiz||ui.advQuiz.n!==n) ui.advQuiz={n:n,i:0,sel:null,checked:false,score:0,done:false,answers:[]}
+  var s=ui.advQuiz
+  var letters=['A','B','C','D']
+  if(s.done){
+    var ok=s.score>=4
+    return shell('course', `${topBack('Тест','#/adv/lesson/'+n)}
+      <div class="card" style="text-align:center;padding:28px">
+        <h2>${s.score} из 5</h2>
+        <p class="muted">${ok?'Засчитан.':'Нужно 4 из 5.'}</p>
+        ${ok?'':`<button class="btn btn-p" id="againAdv">Ещё раз</button>`}
+        ${ok?`<a class="btn btn-p" href="${n<ADVANCED_LESSONS.length?'#/adv/lesson/'+(n+1):'#/app/advanced'}">${n<ADVANCED_LESSONS.length?'Следующий урок':'К курсу'}</a>`:''}
+      </div>`)
+  }
+  var q=qs[s.i]
+  return shell('course', `
+    ${topBack('Тест','#/adv/lesson/'+n)}
+    <div class="muted">Вопрос ${s.i+1} / 5</div>
+    <div class="bar"><i style="width:${(s.i/5)*100}%"></i></div>
+    <h2>${q.text}</h2>
+    ${q.options.map(function(o,idx){return `<button class="opt ${s.sel===idx?'sel':''}" data-i="${idx}"><span class="letter">${letters[idx]}</span>${o}</button>`}).join('')}
+    ${!s.checked?`<button class="btn btn-p" id="ansAdv" ${s.sel==null?'disabled':''}>Ответить</button>`:
+      `<div class="${s.sel===q.answer?'ok':'no'}">${s.sel===q.answer?'Верно. ':'Пока нет. '}${q.explain}</div>
+       <button class="btn btn-p" id="nextAdv">${s.i===4?'Итог':'Продолжить'}</button>`}
+  `)
+}
+function advTrainerPage(){
+  if(!v3Open()) return advancedHome()
+  if(!(user().access && user().access.advanced_trainer_unlocked)){
+    return shell('lab', `${topBack('Курс','#/app/advanced')}<div class="card"><b>🔒 Продвинутый тренажёр</b><p class="muted">Сначала все уроки и тесты продвинутого курса.</p></div>`)
+  }
+  if(!ui.advTrainer) ui.advTrainer={i:0,sel:null,num:'',checked:false,score:0,done:false,list:ADVANCED_TRAINER}
+  var s=ui.advTrainer
+  if(s.done) return shell('lab', `${topBack('Курс','#/app/advanced')}<div class="card" style="text-align:center"><h2>${s.score}/${s.list.length}</h2><a class="btn btn-p" href="#/app/advanced">Назад</a></div>`)
+  var q=s.list[s.i]
+  var letters=['A','B','C','D']
+  return shell('lab', `
+    ${topBack('Продвинутый тренажёр','#/app/advanced')}
+    <div class="muted">${s.i+1}/5</div>
+    <h2>${q.text}</h2>
+    ${q.type==='single'?q.options.map(function(o,idx){return `<button class="opt ${s.sel===idx?'sel':''}" data-i="${idx}"><span class="letter">${letters[idx]}</span>${o}</button>`}).join(''):`<input type="number" id="numAdv" value="${s.num||''}">`}
+    ${!s.checked?`<button class="btn btn-p" id="ansAT">Ответить</button>`:`<div class="${(q.type==='numeric'?Number(s.num)===q.answer:s.sel===q.answer)?'ok':'no'}">${(q.type==='numeric'?Number(s.num)===q.answer:s.sel===q.answer)?q.explainOk:q.explainNo}</div><button class="btn btn-p" id="nextAT">Дальше</button>`}
+  `)
+}
+
+function render(){
+  var r=route(), root=$('app'), u=user()
+  if(r==='/'||r===''){ root.innerHTML=landing(); bind(); return }
+  if(r==='/login'){ root.innerHTML=auth('l'); bind(); return }
+  if(r==='/register'){ root.innerHTML=auth('r'); bind(); return }
+  if(!u){ go('/login'); return }
+  if(r==='/app'||r==='/app/') root.innerHTML=homePage()
+  else if(r==='/app/course'||r==='/app/lessons') root.innerHTML=coursePage()
+  else if(r==='/app/lab'||r==='/app/missions') root.innerHTML=labView()
+  else if(r==='/app/advanced') root.innerHTML=advancedHome()
+  else if(r.indexOf('/adv/lesson/')===0) root.innerHTML=advLessonPage(Number(r.split('/')[3]))
+  else if(r.indexOf('/adv/quiz/')===0) root.innerHTML=advQuizPage(Number(r.split('/')[3]))
+  else if(r==='/adv/trainer') root.innerHTML=advTrainerPage()
+  else if(r==='/app/profile'||r==='/app/settings'||r==='/app/progress') root.innerHTML=profilePage()
+  else if(r==='/app/retry') root.innerHTML=trainerPage(true)
+  else if(r.indexOf('/lesson/')===0) root.innerHTML=lessonPage(Number(r.split('/')[2]))
+  else if(r.indexOf('/quiz/')===0) root.innerHTML=quizPage(Number(r.split('/')[2]))
+  else if(r.indexOf('/trainer')===0) root.innerHTML=trainerPage(r.indexOf('retry')>=0)
+  else root.innerHTML=homePage()
+  bind()
+  if(r==='/app/lab'||r==='/app/missions'){
+    var ch=$('chart'); if(ch) drawChart(ch, effectivePos())
+  }
+}
+
+function labPos(){ return lab.pos==='cmp'?'call':lab.pos }
+function updateLabHud(){
+  var pos=effectivePos()
+  var pval=Math.round(pl(pos,lab.S,lab.K,lab.P,lab.S0)*10)/10
+  var bev=be(pos, lab.K, lab.P, lab.S0)
+  var sp=$('lab-spot'); if(sp) sp.textContent=lab.S
+  var el
+  el=$('lab-S-val'); if(el) el.textContent=lab.S
+  el=$('lab-K-val'); if(el) el.textContent=lab.K
+  el=$('lab-P-val'); if(el) el.textContent=lab.P
+  el=$('lab-be'); if(el) el.textContent=bev
+  el=$('lab-pl'); if(el){ el.textContent=(pval>=0?'+':'')+pval; el.style.color=pval>=0?'#00B894':'#E17055' }
+}
+function drawChart(el, pos){
+  if(!el) return
+  pos = pos==='cmp'?'call':pos
+  var w=Math.max(280, el.clientWidth||360), h=220, pad=36
+  var xmin=60, xmax=140, ys=[], x
+  for(x=xmin;x<=xmax;x+=1) ys.push(pl(pos,x,lab.K,lab.P,lab.S0))
+  var ymin=Math.min(-lab.P-8, Math.min.apply(null,ys)-4)
+  var ymax=Math.max(12, Math.max.apply(null,ys)+6)
+  var X=function(s){return pad+(s-xmin)/(xmax-xmin)*(w-pad-12)}
+  var Y=function(v){return h-24-(v-ymin)/(ymax-ymin)*(h-pad-8)}
+  function seg(colorNeg){
+    var d='', last=null
+    for(x=xmin;x<=xmax;x+=0.5){
+      var y=pl(pos,x,lab.K,lab.P,lab.S0)
+      var ok=colorNeg ? (y<=0.02) : (y>=-0.02)
+      if(!ok){ last=null; continue }
+      d += (last==null?'M':'L')+X(x)+' '+Y(y)+' '
+      last=x
+    }
+    return d
+  }
+  var zero=Y(0)
+  var bev=be(pos, lab.K, lab.P, lab.S0)
+  var bex=X(Math.max(xmin, Math.min(xmax, bev)))
+  var curx=X(lab.S), cury=Y(pl(pos,lab.S,lab.K,lab.P,lab.S0))
+  var pnow=pl(pos,lab.S,lab.K,lab.P,lab.S0)
+  el.innerHTML='<svg id="plsvg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" style="touch-action:none;cursor:ew-resize">'+
+    '<line x1="'+pad+'" y1="'+zero+'" x2="'+(w-8)+'" y2="'+zero+'" stroke="#E1E4EA" stroke-width="1"/>'+
+    '<line x1="'+bex+'" y1="18" x2="'+bex+'" y2="'+(h-18)+'" stroke="#6C5CE7" stroke-width="1.5" stroke-dasharray="4 4"/>'+
+    '<path d="'+seg(true)+'" fill="none" stroke="#E17055" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<path d="'+seg(false)+'" fill="none" stroke="#00B894" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<circle cx="'+bex+'" cy="'+zero+'" r="4" fill="#6C5CE7"/>'+
+    '<rect x="'+(bex-34)+'" y="4" width="68" height="18" rx="9" fill="#6C5CE7"/>'+
+    '<text x="'+bex+'" y="17" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">BE '+bev+'</text>'+
+    '<circle cx="'+curx+'" cy="'+cury+'" r="7" fill="'+(pnow>=0?'#00B894':'#E17055')+'" stroke="#fff" stroke-width="2"/>'+
+    '<text x="8" y="14" fill="#9AA0A6" font-size="11">P/L</text>'+
+    '<text x="'+(w/2)+'" y="'+(h-4)+'" text-anchor="middle" fill="#9AA0A6" font-size="11">Цена актива</text>'+
+    '</svg>'
+  var svg=$('plsvg')
+  if(svg){
+    var drag=false
+    function setFromEvt(ev){
+      var e=ev.touches?ev.touches[0]:ev
+      var r=svg.getBoundingClientRect()
+      var s=xmin+(e.clientX-r.left-pad)/(w-pad-12)*(xmax-xmin)
+      s=Math.round(Math.max(xmin, Math.min(xmax, s)))
+      lab.S=s
+      var sl=document.querySelector('.slider[data-k="S"]')
+      if(sl) sl.value=s
+      updateLabHud()
+      drawChart(el, pos)
+    }
+    svg.onmousedown=function(ev){ drag=true; setFromEvt(ev); ev.preventDefault() }
+    svg.onmousemove=function(ev){ if(drag) setFromEvt(ev) }
+    window.onmouseup=function(){ drag=false }
+    svg.ontouchstart=function(ev){ drag=true; setFromEvt(ev); ev.preventDefault() }
+    svg.ontouchmove=function(ev){ if(drag){ setFromEvt(ev); ev.preventDefault() } }
+    svg.ontouchend=function(){ drag=false }
+  }
+}
+
+function bind(){
+  var out=$('out'); if(out) out.onclick=function(){ try{localStorage.removeItem(TOKEN_KEY)}catch(e){} sessionUser=null; go('/') }
+  var f=$('f')
+  if(f) f.onsubmit=function(e){
+    e.preventDefault()
+    var email=$('email').value.trim().toLowerCase(), pass=$('pass').value, err=$('err')
+    try{
+      var path = route()==='/register' ? '/api/register' : '/api/login'
+      var payload = route()==='/register' ? { email:email, password:pass, agree:true } : { email:email, password:pass }
+      var data = localApi(path, payload)
+      localStorage.setItem(TOKEN_KEY, data.token)
+      sessionUser = data.user
+      go('/app')
+    }catch(ex){ err.style.display='block'; err.textContent=ex.message }
+  }
+  document.querySelectorAll('[data-acc]').forEach(function(a){ a.querySelector('b').onclick=function(){ a.classList.toggle('open') } })
+  document.querySelectorAll('[data-mid]').forEach(function(a){
+    a.onclick=function(e){
+      e.preventDefault()
+      var id=Number(a.getAttribute('data-mid'))
+      var m=MISSIONS[id-1]
+      if(!m) return
+      ui.mission=id
+      ui.missionOk=false; ui.missionMsg=''; ui.missionAns=''
+      Object.assign(lab, DEFAULTS, m.setup||{})
+      lab.pos=(m.pos==='prot'?'put':(m.pos==='cmp'?'call':m.pos))
+      lab.hold=!!(m.setup && m.setup.hold)
+      if(m.setup && m.setup.S0!=null) lab.S0=m.setup.S0
+      go('/app/lab')
+    }
+  })
+  function maybeAutoMission(){
+    var m=MISSIONS[ui.mission-1]
+    if(m && !m.field && !m.options && m.check()){
+      ui.missionOk=true; ui.missionMsg=m.ok
+      mut(function(p){ p.missions=p.missions||{}; p.missions[m.id]=true })
+    }
+  }
+  var ptype=$('ptype'); if(ptype) ptype.onchange=function(){
+    lab.pos=ptype.value==='prot'?'put':ptype.value
+    maybeAutoMission()
+    render()
+  }
+  var hold=$('hold'); if(hold) hold.onchange=function(){
+    lab.hold=!!hold.checked
+    if(lab.hold) lab.S0=lab.S
+    maybeAutoMission()
+    render()
+  }
+  document.querySelectorAll('.slider').forEach(function(sl){
+    sl.oninput=function(){
+      lab[sl.dataset.k]=Number(sl.value)
+      updateLabHud()
+      var ch=$('chart'); if(ch) drawChart(ch, effectivePos())
+      var mans=$('mans')
+      if(mans){ ui.missionAns=mans.value; recheckMissionLive() }
+    }
+    sl.onchange=function(){ render() }
+  })
+  var r=route()
+  if(r.indexOf('/quiz/')===0){
+    var n=Number(r.split('/')[2]); var qs=QUIZZES[n]; var s=ui.quiz
+    document.querySelectorAll('.opt[data-i]').forEach(function(b){ b.onclick=function(){ s.sel=Number(b.dataset.i); render() } })
+    var ans=$('ans'); if(ans) ans.onclick=function(){ s.checked=true; if(s.sel===qs[s.i].answer) s.score++; s.answers[s.i]=s.sel; render() }
+    var next=$('next'); if(next) next.onclick=function(){
+      if(s.i===4){
+        try { var rr=localApi('/api/quiz/'+n+'/submit', { answers: s.answers }); s.score=rr.score; sessionUser=rr.user } catch(e) {}
+        s.done=true
+      } else { s.i++; s.sel=null; s.checked=false }
+      render()
+    }
+    var again=$('again'); if(again) again.onclick=function(){ ui.quiz={n:n,i:0,sel:null,checked:false,score:0,done:false,answers:[]}; render() }
+  }
+  if(r.indexOf('/trainer')===0||r==='/app/retry'){
+    var s=ui.trainer
+    if(s && !s.done){
+      var q=s.list[s.i]
+      document.querySelectorAll('.opt[data-i]').forEach(function(b){ b.onclick=function(){ s.sel=Number(b.dataset.i); render() } })
+      var num=$('num'); if(num) num.oninput=function(){ s.num=num.value }
+      var ans=$('ans'); if(ans) ans.onclick=function(){
+        var ok=q.type==='numeric'?Number(s.num)===q.answer:s.sel===q.answer
+        s.checked=true; if(ok) s.score++; else s.wrong.push(q.id); render()
+      }
+      var next=$('next'); if(next) next.onclick=function(){
+        if(s.i===s.list.length-1){
+          if(!s.retry){
+            try{
+              var answers=s.list.map(function(qq,i){return qq.type==='numeric'?null:null})
+              // persist best locally via mut + trainer completed if score>=7
+              mut(function(p){ p.trainer.best=Math.max(p.trainer.best||0,s.score); p.trainer.lastWrong=s.wrong; if(s.score>=7) p.trainer.completed=true })
+              var db=ldb(); var tok=localStorage.getItem(TOKEN_KEY); var uu=db.users.find(function(x){return x.token===tok}); if(uu){ uu.progress.trainer.best=Math.max(uu.progress.trainer.best||0,s.score); uu.progress.trainer.lastWrong=s.wrong; if(s.score>=7) uu.progress.trainer.completed=true; ldsave(db); sessionUser=pub(uu) }
+            }catch(e){}
+          }
+          s.done=true
+        } else { s.i++; s.sel=null; s.num=''; s.checked=false }
+        render()
+      }
+    }
+  }
+  function recheckMissionLive(){
+    var m=MISSIONS[ui.mission-1]
+    if(!m || m.field!=='ans') return
+    var ans=ui.missionAns
+    if(ans===undefined || ans===null || String(ans)==='' ) return
+    var ok=m.check(ans)
+    ui.missionOk=ok; ui.missionMsg=ok?m.ok:m.no
+    if(ok) mut(function(p){ p.missions=p.missions||{}; p.missions[m.id]=true })
+    var fb=$('mfb')
+    if(fb) fb.innerHTML=ui.missionMsg?'<div class="'+(ok?'ok':'no')+'">'+ui.missionMsg+'</div>':''
+  }
+  var mgo=$('mgo')
+  function checkMission(ans){
+    if($('mans')) ui.missionAns=$('mans').value
+    var m=MISSIONS[ui.mission-1]
+    var ok=m.check(ans)
+    ui.missionOk=ok; ui.missionMsg=ok?m.ok:m.no
+    if(ok) mut(function(p){ p.missions=p.missions||{}; p.missions[m.id]=true })
+    render()
+  }
+  if(mgo) mgo.onclick=function(){ var v=$('mans')?$('mans').value:null; ui.missionAns=v; checkMission(v) }
+  var mans=$('mans'); if(mans) mans.oninput=function(){ ui.missionAns=mans.value; recheckMissionLive() }
+  document.querySelectorAll('.opt[data-ans]').forEach(function(b){ b.onclick=function(){ checkMission(b.dataset.ans) } })
+  var mnext=$('mnext'); if(mnext) mnext.onclick=function(){
+    if(!ui.missionOk) return
+    ui.mission=Math.min(10, ui.mission+1)
+    var m=MISSIONS[ui.mission-1]
+    Object.assign(lab, DEFAULTS, m.setup||{})
+    lab.pos=(m.pos==='prot'?'put':(m.pos==='cmp'?'call':m.pos))
+    lab.hold=!!(m.setup && m.setup.hold)
+    if(m.setup && m.setup.S0!=null) lab.S0=m.setup.S0
+    ui.missionOk=false; ui.missionMsg=''; ui.missionAns=''
+    render()
+  }
+}
+
+window.addEventListener('hashchange', function(){
+  if(route().indexOf('/quiz/')!==0) ui.quiz=null
+  if(route().indexOf('/adv/quiz/')!==0) ui.advQuiz=null
+  if(route()!=='/adv/trainer') ui.advTrainer=null
+  if(route().indexOf('/trainer')!==0 && route()!=='/app/retry') ui.trainer=null
+  render()
+})
+window.addEventListener('resize', function(){ if(route()==='/app/lab'){ var ch=$('chart'); if(ch) drawChart(ch, effectivePos()) } })
+
+;(function boot(){
+  bootstrapped=true
+  try {
+    render()
+    var tok=null
+    try { tok=localStorage.getItem(TOKEN_KEY) } catch(e) {}
+    if(tok){
+      try { var d=localApi('/api/me', null, tok); sessionUser=d.user; render() }
+      catch (e) { try { localStorage.removeItem(TOKEN_KEY) } catch(x){} sessionUser=null; render() }
+    }
+  } catch (e) {
+    var el=document.getElementById('app')
+    if(el) el.innerHTML='<div style="padding:24px;font-family:-apple-system,sans-serif"><h2>Не удалось запустить</h2><p>'+String(e && e.message || e)+'</p></div>'
+  }
+})()
+
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3438a65e9e99fb7',t:'MTc4ODI1ODAwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
